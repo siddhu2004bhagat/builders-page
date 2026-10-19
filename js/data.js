@@ -33,7 +33,7 @@ window.BUILDERS = {
 
   team: [
     { id: "raja", name: "Er. Raja Singh", short: "Raja", role: "Team Lead & Manager", line: "Runs the team. Picks the idea, sets the deadline, keeps all seven of us shipping.", photo: "assets/team/raja.jpg", accent: "#ff7a1a",
-      look: { skin: "#C98F68", hair: "#141414", shirt: "#1a1a1e", beard: true, glasses: true, style: "side" } },
+      look: { skin: "#C98F68", hair: "#141414", shirt: "#ff7a1a", beard: true, glasses: true, style: "side" } },
     { id: "ratnam", name: "Ratnam Kalra", short: "Ratnam", role: "Script Writer", line: "Finds the story in a pile of wires. Writes the hook that stops your thumb.", photo: "assets/team/ratnam.jpg", accent: "#f3ede2",
       look: { skin: "#C08562", hair: "#161210", shirt: "#1f5a45", beard: true, glasses: true, style: "curly" } },
     { id: "sudhanshu", name: "Sudhanshu Kumar Jaiswal", short: "Sudhanshu", role: "Engineer", line: "Electronics, firmware and 3 AM debugging sessions.", photo: null, accent: "#4fd1ff",

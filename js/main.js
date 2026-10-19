@@ -370,6 +370,52 @@
   })();
 
   /* ==========================================================
+     CH 03½ — THE REVEAL: cloth off, "MAA KASAM!", "CRAZYYYY…"
+     ========================================================== */
+  (function reveal() {
+    const sec = $("#ch-reveal"), st = $("#stage-reveal");
+    const q = (c) => $(c, st), qa = (c) => $$(c, st);
+    const bubs = qa(".rv-bub, .rv-badge"), conf = qa(".rv-conf"), crazy = q(".rv-crazy");
+    gsap.set(bubs, { scale: 0, transformOrigin: "50% 100%" });
+    gsap.set(conf, { y: -40, opacity: 0 });
+    // the crowd is always buzzing; Raja can't stop shaking his head
+    if (!reduce) {
+      qa(".rv-body").forEach((b, i) => gsap.to(b, { y: -6, duration: 0.28 + (i % 3) * 0.05, yoyo: true, repeat: -1, ease: "sine.inOut", delay: i * 0.07 }));
+      gsap.to(q(".rv-person--raja .rv-head"), { rotation: 7, transformOrigin: "50% 100%", duration: 0.18, yoyo: true, repeat: -1, ease: "sine.inOut" });
+      gsap.to(qa(".rv-rec"), { opacity: 0.2, duration: 0.5, yoyo: true, repeat: -1 });
+    }
+    const counters = { p: 0 };
+    const tl = pinnedTL(sec, 2.4);
+    const swap = (id, from, to, at) => tl.to(q(`.rv-person--${id} .rv-pose--${from}`), { opacity: 0, duration: 0.02 }, at).to(q(`.rv-person--${id} .rv-pose--${to}`), { opacity: 1, duration: 0.02 }, at);
+    const pop = (sel, at) => tl.to(q(sel), { scale: 1, duration: 0.06, ease: "back.out(3)" }, at);
+    tl.to(q(".rv-cloth"), { x: 170, y: -280, rotation: 38, opacity: 0, duration: 0.14, ease: "power2.in" }, 0.03)
+      .to(qa(".rv-spot, .rv-glow"), { opacity: 1, duration: 0.08 }, 0.08)
+      .to(qa(".rv-robot .rb-eye"), { attr: { fill: "#4fd1ff" }, duration: 0.02 }, 0.12);
+    swap("sudhanshu", "down", "up", 0.18); swap("aryan", "down", "up", 0.19);
+    pop(".rv-badge--s", 0.2); pop(".rv-badge--a", 0.21);
+    swap("raja", "down", "head", 0.3);
+    pop(".rv-bub--raja", 0.31);
+    tl.to(q(".rv-bub--raja"), { rotation: -7, duration: 0.012, yoyo: true, repeat: 7, ease: "none" }, 0.37);
+    swap("ratnam", "down", "up", 0.42);
+    pop(".rv-bub--ratnam", 0.43);
+    const yy = { n: 0 };
+    tl.to(yy, { n: 9, duration: 0.4, onUpdate() {
+      const n = Math.round(yy.n);
+      crazy.textContent = "CRAZY" + "Y".repeat(n) + "…";
+      crazy.setAttribute("font-size", 30 - n * 1.2);
+      $("#rv-y").textContent = n + 1;
+    } }, 0.44);
+    swap("prateek", "down", "camera", 0.5); swap("virendra", "down", "clap", 0.52); swap("sahil", "down", "up", 0.54);
+    pop(".rv-bub--sahil", 0.55); pop(".rv-bub--vir", 0.56);
+    tl.fromTo(conf, { y: -40, x: 0, rotation: 0, opacity: 1 }, { y: () => 560 + Math.random() * 80, x: () => gsap.utils.random(-60, 60), rotation: () => gsap.utils.random(-540, 540), opacity: 1, duration: 0.4, stagger: { each: 0.004, from: "random" }, ease: "none" }, 0.56);
+    tl.to(counters, { p: 1, duration: 1, onUpdate() {
+      $("#rv-mk").textContent = Math.round(counters.p * 147);
+      $("#rv-r").textContent = Math.round(Math.min(1, counters.p * 1.6) * 100);
+      $("#rv-hype").textContent = Math.round(counters.p * 100) + "%";
+    } }, 0);
+  })();
+
+  /* ==========================================================
      CH 04 — EDITORS: timeline assembles, playhead scrubs, frames cut
      ========================================================== */
   (function editors() {

@@ -30,6 +30,7 @@ With the local server running, open `http://localhost:5173/` (v3), `/versions/v2
 | 3 | Ratnam: the storytelling | Pinned word-by-word reveal + audience-retention curve (hook / struggle / payoff) |
 | 4 | Ratnam: the script | Scroll-scrubbed typewriter |
 | 5 | Sudhanshu & Aryan: 72 hours of day and night | SVG scene: gradient sky, sun/moon orbit, clouds, shooting star, lamp cone at night, robot assembling, chai cups, clock, build log |
+| 5½ | **The reveal: "Maa kasam!"** | Cloth comes off the robot, spotlight on, engineers celebrated; Raja grabs his head ("MAA KASAM!!"), Ratnam's "CRAZYYYY…" grows with scroll, team cheers, confetti |
 | 6 | Prateek & Virendra: the edit | NLE timeline, playhead, timecode, cuts between frames |
 | 7 | Sahil: the market run | Scooter riding the route on a map, vendor call bubbles, checklist |
 | 8 | Pipeline: Idea → 60M | Pinned horizontal scroll, photo cards |

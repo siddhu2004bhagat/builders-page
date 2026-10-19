@@ -252,6 +252,82 @@
     </svg>`;
   }
 
+  /* ==========================================================
+     REVEAL — the team losing it over what the engineers built
+     front-facing figures; each pose is its own group so the
+     scroll timeline can swap them (down → hands-on-head etc.)
+     ========================================================== */
+  const byId = Object.fromEntries(D.team.map((m) => [m.id, m]));
+  function cheer(id, x, y, s, poses, face = {}) {
+    const m = byId[id], L = m.look, pants = "#24232d", arm = shade(L.shirt, -18);
+    const limb = (d, hx, hy) => `<path d="${d}" stroke="${arm}" stroke-width="10" fill="none" stroke-linecap="round" stroke-linejoin="round"/><circle cx="${hx}" cy="${hy}" r="5.5" fill="${L.skin}"/>`;
+    const POSE = {
+      down: limb("M-18,-70 L-26,-36 L-24,-6", -24, -3) + limb("M18,-70 L26,-36 L24,-6", 24, -3),
+      head: limb("M-18,-70 L-46,-98 L-30,-130", -29, -133) + limb("M18,-70 L46,-98 L30,-130", 29, -133),
+      up: limb("M-18,-70 L-34,-104 L-42,-142", -43, -145) + limb("M18,-70 L34,-104 L42,-142", 43, -145),
+      clap: limb("M-18,-70 L-26,-42 L-5,-58", -4, -59) + limb("M18,-70 L26,-42 L5,-60", 4, -61),
+      camera: limb("M-18,-70 L-28,-86 L-14,-100", -13, -101) + limb("M18,-70 L28,-86 L14,-100", 13, -101) +
+        `<g class="rv-cam"><rect x="-19" y="-118" width="38" height="24" rx="4" fill="#15151a" stroke="#3a3946" stroke-width="2"/><circle cx="0" cy="-106" r="7" fill="#0b1a26" stroke="#4fd1ff" stroke-width="2"/><circle class="rv-rec" cx="13" cy="-113" r="2.6" fill="#ff3b3b"/></g>`,
+    };
+    const headY = -108;
+    const headSvg = m.photo
+      ? `<clipPath id="rv-cp-${id}"><circle cx="0" cy="${headY - 4}" r="31"/></clipPath>
+         <image href="${m.photo}" x="${face.x ?? -36}" y="${face.y ?? -150}" width="72" height="96" preserveAspectRatio="xMidYMid slice" clip-path="url(#rv-cp-${id})"/>
+         <circle cx="0" cy="${headY - 4}" r="31" fill="none" stroke="${m.accent}" stroke-width="3"/>`
+      : `<circle cx="0" cy="${headY}" r="22" fill="${L.skin}"/>
+         <path d="M-23,${headY} C-25,${headY - 28} 25,${headY - 28} 23,${headY} C14,${headY - 14} -14,${headY - 14} -23,${headY} Z" fill="${L.hair}"/>
+         <path d="M-12,${headY - 2} q4,-5 8,0 M4,${headY - 2} q4,-5 8,0" stroke="#111" stroke-width="2.2" fill="none" stroke-linecap="round"/>
+         <path d="M-9,${headY + 7} Q0,${headY + 19} 9,${headY + 7} Z" fill="#3a1410"/>
+         ${L.beard ? `<path d="M-20,${headY + 2} C-18,${headY + 26} 18,${headY + 26} 20,${headY + 2} C12,${headY + 18} -12,${headY + 18} -20,${headY + 2} Z" fill="${L.hair}" opacity=".9"/>` : ""}
+         ${L.glasses ? `<g fill="none" stroke="#111" stroke-width="2"><circle cx="-8" cy="${headY - 2}" r="6"/><circle cx="8" cy="${headY - 2}" r="6"/></g>` : ""}
+         ${L.headphones ? `<path d="M-23,${headY} C-23,${headY - 32} 23,${headY - 32} 23,${headY}" stroke="#222" stroke-width="5" fill="none"/>` : ""}`;
+    return `
+    <g class="rv-person rv-person--${id}" transform="translate(${x},${y}) scale(${s})">
+      <g class="rv-body">
+        <rect x="-14" y="0" width="11" height="78" rx="5" fill="${pants}"/><rect x="3" y="0" width="11" height="78" rx="5" fill="${shade(pants, -8)}"/>
+        <ellipse cx="-9" cy="80" rx="10" ry="5" fill="#0d0c10"/><ellipse cx="9" cy="80" rx="10" ry="5" fill="#0d0c10"/>
+        <path d="M-20,4 L-22,-60 Q-22,-76 -8,-78 L8,-78 Q22,-76 22,-60 L20,4 Z" fill="${L.shirt}"/>
+        <rect x="-5" y="-88" width="10" height="12" fill="${shade(L.skin, -20)}"/>
+        <g class="rv-head">${headSvg}</g>
+        ${poses.map((p, i) => `<g class="rv-pose rv-pose--${p}" style="opacity:${i ? 0 : 1}">${POSE[p]}</g>`).join("")}
+      </g>
+    </g>`;
+  }
+  function revealScene() {
+    const conf = Array.from({ length: 70 }, (_, i) => `<rect class="rv-conf" x="${(i * 53) % 800}" y="-20" width="${6 + (i % 3) * 2}" height="${10 + (i % 4) * 2}" rx="1.5" fill="${["#ff7a1a", "#4fd1ff", "#5cf2a2", "#ffd23f", "#ff5c8a", "#a78bfa", "#f3ede2"][i % 7]}"/>`).join("");
+    const burst = (cx, cy, r1, r2, n) => Array.from({ length: n * 2 }, (_, i) => { const a = (i / (n * 2)) * Math.PI * 2, r = i % 2 ? r2 : r1; return `${(cx + Math.cos(a) * r * 1.5).toFixed(1)},${(cy + Math.sin(a) * r).toFixed(1)}`; }).join(" ");
+    return `
+    <svg viewBox="0 0 800 600" xmlns="http://www.w3.org/2000/svg" aria-label="The team celebrating the engineers' build: Raja says Maa kasam, Ratnam yells crazy">
+      <defs>
+        <linearGradient id="rvWall" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#18161f"/><stop offset="1" stop-color="#0f0e14"/></linearGradient>
+        <linearGradient id="rvSpot" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="rgba(255,226,170,.55)"/><stop offset="1" stop-color="rgba(255,226,170,0)"/></linearGradient>
+        <radialGradient id="rvGlow"><stop offset="0" stop-color="rgba(255,150,60,.5)"/><stop offset="1" stop-color="rgba(255,150,60,0)"/></radialGradient>
+      </defs>
+      <rect width="800" height="600" fill="url(#rvWall)"/>
+      <rect y="520" width="800" height="80" fill="#0b0a0e"/>
+      <g class="rv-banner"><path d="M150,40 Q400,74 650,40" stroke="#3a3946" stroke-width="2" fill="none"/>${["I", "T", " ", "W", "O", "R", "K", "S"].map((c, i) => `<g transform="translate(${190 + i * 60},${50 + Math.sin((i / 7) * Math.PI) * 14})"><path d="M-20,0 L20,0 L0,34 Z" fill="${["#ff7a1a", "#ffd23f", "#4fd1ff", "#5cf2a2", "#ff5c8a", "#a78bfa", "#ff7a1a", "#ffd23f"][i]}"/><text y="18" text-anchor="middle" font-family="Anton" font-size="15" fill="#111">${c}</text></g>`).join("")}</g>
+      <polygon class="rv-spot" points="370,0 430,0 520,520 280,520" fill="url(#rvSpot)" opacity="0"/>
+      <circle class="rv-glow" cx="400" cy="360" r="170" fill="url(#rvGlow)" opacity="0"/>
+      ${cheer("prateek", 205, 440, 0.92, ["down", "camera"])}
+      ${cheer("sahil", 462, 440, 0.88, ["down", "up"])}
+      ${cheer("virendra", 600, 440, 0.92, ["down", "clap"])}
+      <rect x="320" y="420" width="160" height="14" rx="3" fill="#5a4a3a"/><rect x="335" y="434" width="10" height="90" fill="#3a2d22"/><rect x="455" y="434" width="10" height="90" fill="#3a2d22"/>
+      <g class="rv-robot">${robot(400, 420, 1.6)}</g>
+      <path class="rv-cloth" d="M330,420 C330,330 350,240 400,236 C450,240 470,330 470,420 C450,410 430,426 400,416 C370,426 350,410 330,420 Z" fill="#8a8794" stroke="#6c6a76" stroke-width="2"/>
+      ${cheer("raja", 112, 470, 1.25, ["down", "head"], { x: -36, y: -149 })}
+      ${cheer("sudhanshu", 268, 476, 1.08, ["down", "up"])}
+      ${cheer("aryan", 540, 476, 1.08, ["down", "up"])}
+      ${cheer("ratnam", 690, 470, 1.25, ["down", "up"], { x: -32, y: -155 })}
+      <g class="rv-badge rv-badge--s" transform="translate(268,262)"><rect x="-44" y="-15" width="88" height="28" rx="14" fill="#4fd1ff"/><text y="5" text-anchor="middle" font-family="Anton" font-size="14" fill="#111">ENGINEER 🙇</text></g>
+      <g class="rv-badge rv-badge--a" transform="translate(540,262)"><rect x="-44" y="-15" width="88" height="28" rx="14" fill="#5cf2a2"/><text y="5" text-anchor="middle" font-family="Anton" font-size="14" fill="#111">ENGINEER 🙇</text></g>
+      <g class="rv-bub rv-bub--raja" transform="translate(150,150)"><polygon points="${burst(0, 0, 58, 44, 13)}" fill="#ffd23f" stroke="#111" stroke-width="3"/><text y="-2" text-anchor="middle" font-family="Anton" font-size="30" fill="#111">MAA</text><text y="28" text-anchor="middle" font-family="Anton" font-size="30" fill="#d61f3c">KASAM!!</text></g>
+      <g class="rv-bub rv-bub--ratnam" transform="translate(650,168)"><rect x="-120" y="-34" width="240" height="60" rx="30" fill="#f3ede2" stroke="#111" stroke-width="3"/><path d="M30,24 L48,52 L56,24 Z" fill="#f3ede2" stroke="#111" stroke-width="3" stroke-linejoin="round"/><rect x="28" y="20" width="30" height="8" fill="#f3ede2"/><text class="rv-crazy" y="6" text-anchor="middle" font-family="Anton" font-size="30" fill="#111">CRAZY…</text></g>
+      <g class="rv-bub rv-bub--sahil" transform="translate(462,250)"><rect x="-40" y="-16" width="80" height="28" rx="14" fill="#ffd23f"/><text y="4" text-anchor="middle" font-family="Space Grotesk" font-weight="700" font-size="12" fill="#111">bhai 🔥🔥</text></g>
+      <g class="rv-bub rv-bub--vir" transform="translate(610,262)"><rect x="-34" y="-16" width="68" height="28" rx="14" fill="#ff5c8a"/><text y="4" text-anchor="middle" font-size="13">👏👏👏</text></g>
+      <g class="rv-confetti">${conf}</g>
+    </svg>`;
+  }
+
   /* editing preview frames (Prateek & Virendra) */
   const frames = [
     `<svg viewBox="0 0 320 180"><rect width="320" height="180" fill="#1a0f05"/><circle cx="160" cy="110" r="70" fill="#ff7a1a" opacity=".25"/>${robot(160, 150, 1.1)}<text x="16" y="30" font-family="Anton" font-size="22" fill="#fff">SCENE 12 · A-ROLL</text></svg>`,
@@ -265,5 +341,6 @@
   $("#stage-raja").insertAdjacentHTML("beforeend", rajaScene());
   $("#stage-builders").insertAdjacentHTML("beforeend", buildersScene());
   $("#stage-sahil").insertAdjacentHTML("beforeend", sahilScene());
+  $("#stage-reveal").insertAdjacentHTML("beforeend", revealScene());
   document.querySelectorAll(".editor__frame").forEach((el, i) => (el.innerHTML = frames[i % frames.length]));
 })();

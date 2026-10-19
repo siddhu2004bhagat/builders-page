@@ -554,3 +554,5 @@ body::after {
 .ed-cursor__tag b { font-family: var(--display); font-weight: 400; font-size: clamp(14px, 1.3vw, 19px); text-transform: uppercase; letter-spacing: .03em; line-height: 1; }
 .ed-cursor__tag i { font-style: normal; font-family: var(--mono); font-size: 10px; opacity: .8; margin-top: 2px; }
 #curV .ed-cursor__tag { left: auto; right: 2px; border-radius: 12px 4px 12px 12px; }
+.stage--reveal { background: #0f0e14; }
+#ch-reveal .chapter__text p b { color: var(--ink); font-weight: 500; }
