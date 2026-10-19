@@ -1,0 +1,401 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Builders.mu — We Build. You Watch.</title>
+  <meta name="description" content="Builders.mu: seven people, one workshop, building cool stuff at Masters' Union. Step inside and watch every video get made.">
+  <meta property="og:title" content="Builders.mu — Just ship it.">
+  <meta property="og:description" content="Step inside the workshop where every Builders.mu video gets made.">
+  <meta name="theme-color" content="#07060a">
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='14' fill='%2307060a'/%3E%3Ctext x='32' y='45' text-anchor='middle' font-family='Impact' font-size='36' fill='%23ff7a1a'%3EB%3C/text%3E%3C/svg%3E">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Anton&family=Courier+Prime:wght@400;700&family=JetBrains+Mono:wght@400;500&family=Permanent+Marker&family=Space+Grotesk:wght@400;500;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/style.css">
+  <script type="importmap">
+    { "imports": {
+      "three": "https://cdn.jsdelivr.net/npm/three@0.169.0/build/three.module.js",
+      "three/addons/": "https://cdn.jsdelivr.net/npm/three@0.169.0/examples/jsm/"
+    } }
+  </script>
+</head>
+<body class="is-loading">
+
+  <!-- ================= LOADER — film leader countdown ================= -->
+  <div class="loader" id="loader" role="button" tabindex="0" aria-label="Enter the workshop">
+    <div class="leader" aria-hidden="true">
+      <div class="leader__sweep" id="sweep"></div>
+      <div class="leader__cross"></div>
+      <div class="leader__num" id="leaderNum">3</div>
+    </div>
+    <div class="loader__meta">
+      <span class="mono">Builders.mu · Reel 01</span>
+      <span class="mono"><b id="pct">0</b>% loaded</span>
+    </div>
+    <div class="loader__log mono" id="log">&gt; powering up soldering iron…</div>
+    <div class="loader__cta mono">Click anywhere to <span>enter the workshop</span></div>
+  </div>
+
+  <div class="cursor" aria-hidden="true"></div>
+  <div class="cursor-ring" aria-hidden="true"></div>
+  <div class="progress" aria-hidden="true"></div>
+
+  <nav class="nav">
+    <a href="#top" class="nav__logo">BUILDERS<b>.</b>MU</a>
+    <div class="nav__links">
+      <a href="#workshop">Workshop</a>
+      <a href="#mission">Mission 60M</a>
+      <a href="#team">Crew</a>
+      <a href="#uploads">Uploads</a>
+      <a href="#community-sec">Community</a>
+    </div>
+    <a href="#uploads" class="nav__cta magnetic">Watch latest ▶</a>
+  </nav>
+
+  <main id="top">
+    <!-- ================= 3D WORKSHOP: hero + camera tour ================= -->
+    <section class="world" id="workshop">
+      <canvas id="gl" aria-label="Real-time 3D view of the Builders.mu workshop with the team at work"></canvas>
+      <div class="world__vignette"></div>
+      <div class="letterbox letterbox--top"></div><div class="letterbox letterbox--bot"></div>
+
+      <div class="vf" aria-hidden="true">
+        <i class="vf__c vf__c--tl"></i><i class="vf__c vf__c--tr"></i><i class="vf__c vf__c--bl"></i><i class="vf__c vf__c--br"></i>
+        <div class="vf__top mono"><span class="rec">REC</span><span id="vfTc">00:00:00:00</span><span>CAM A · 24 FPS · ISO 800</span></div>
+        <div class="vf__bot mono"><span id="vfStation">WIDE · THE WORKSHOP</span><span>4K · 2.39:1</span></div>
+      </div>
+
+      <div class="world__hero">
+        <span class="eyebrow">Seven builders · One workshop · Masters' Union</span>
+        <h1 class="hero__title display">
+          <span class="split-line"><span>We build</span></span>
+          <span class="split-line"><span>crazy stuff.</span></span>
+          <span class="split-line"><span>You <span class="accent">watch.</span></span></span>
+        </h1>
+        <div class="jsi jsi--hero" aria-label="Just ship it."><span>Just ship it.</span><svg viewBox="0 0 300 30" aria-hidden="true"><path d="M4,18 C70,8 160,6 296,14 M30,26 C110,18 190,18 270,24"/></svg></div>
+        <p class="hero__lede"><strong>Builders.mu</strong> is the team behind the builds: a lead, a writer, two engineers, two editors and a producer. Scroll to step inside the workshop.</p>
+      </div>
+      <div class="hero__scroll mono"><i></i>Scroll to enter</div>
+
+      <!-- labels that follow each person in 3D -->
+      <div class="tag3d" data-track="raja"><b>Er. Raja Singh</b><span>● planning the next build</span></div>
+      <div class="tag3d" data-track="ratnam"><b>Ratnam Kalra</b><span>● writing hook v7</span></div>
+      <div class="tag3d" data-track="sudhanshu"><b>Sudhanshu</b><span>● flashing firmware</span></div>
+      <div class="tag3d" data-track="aryan"><b>Aryan Sagar</b><span>● mounting arm v4</span></div>
+      <div class="tag3d" data-track="prateek"><b>Prateek</b><span>● cutting the hook</span></div>
+      <div class="tag3d" data-track="virendra"><b>Virendra</b><span>● colour grade</span></div>
+      <div class="tag3d" data-track="sahil"><b>Sahil</b><span>● on call · vendor #14</span></div>
+
+      <div class="tour__card" data-stop="1" data-who="raja"><span class="mono">01 · Team Lead &amp; Manager</span><h3>Er. Raja Singh</h3><p>The war room. Every idea, deadline and late-night push in this building starts at Raja's whiteboard.</p></div>
+      <div class="tour__card" data-stop="2" data-who="ratnam"><span class="mono">02 · Script Writer</span><h3>Ratnam Kalra</h3><p>The quietest desk with the loudest output. Ratnam finds the story in a pile of wires: the hook, the struggle and the payoff.</p></div>
+      <div class="tour__card" data-stop="3" data-who="sudhanshu aryan"><span class="mono">03 · The Backbone</span><h3>Sudhanshu &amp; Aryan</h3><p>The bench never goes cold. Circuits, firmware, motors and metal: the two engineers who build the thing every video is about.</p></div>
+      <div class="tour__card" data-stop="4" data-who="prateek virendra"><span class="mono">04 · The Edit Bay</span><h3>Prateek &amp; Virendra</h3><p>Seventy-two hours of footage in. Twelve minutes you can't skip out. Story cut, sound, colour and the thumbnail.</p></div>
+      <div class="tour__card" data-stop="5" data-who="sahil"><span class="mono">05 · Producer</span><h3>Sahil</h3><p>The loading door. Sahil is either on the phone with vendor #14 or already on the scooter to the market.</p></div>
+      <div class="tour__dots" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i><i></i></div>
+    </section>
+
+    <div class="marquee"><div class="marquee__track">
+      <span>Idea</span><span>Script</span><span>Source</span><span>Build</span><span>Break</span><span>Rebuild</span><span>Shoot</span><span>Edit</span><span>Upload</span>
+      <span>Idea</span><span>Script</span><span>Source</span><span>Build</span><span>Break</span><span>Rebuild</span><span>Shoot</span><span>Edit</span><span>Upload</span>
+    </div></div>
+
+    <!-- ================= MISSION 60M — Raja's command centre ================= -->
+    <section class="mission" id="mission">
+      <div class="mission__ghost display" aria-hidden="true">60M</div>
+      <div class="mission__grid">
+        <div class="mission__left">
+          <span class="eyebrow">Mission control · Er. Raja Singh</span>
+          <h2 class="display">60 million views.<br><span class="accent">One quarter.</span></h2>
+          <p class="mission__lede">Raja manages the whole team, and this quarter he's set one target: <b>60,000,000 views</b>. Every script, build, cut and market run is planned backwards from that number, and he's on all seven of us until we hit it.</p>
+          <div class="odo" id="odo" aria-label="60,000,000"></div>
+          <div class="mq">
+            <div class="mq__row mono"><span id="mqLabel">Q4 2026</span><span><b id="mqPct">0</b>% of quarter gone</span></div>
+            <div class="mq__bar"><i id="mqBar"></i></div>
+            <div class="mq__count" id="countdown">
+              <div><b data-u="d">00</b><span>days</span></div><div><b data-u="h">00</b><span>hrs</span></div><div><b data-u="m">00</b><span>min</span></div><div><b data-u="s">00</b><span>sec</span></div>
+            </div>
+          </div>
+          <blockquote class="mission__quote">“Sixty million. One quarter. Nobody sleeps on a good idea.”<cite>— Er. Raja Singh, Team Lead</cite></blockquote>
+        </div>
+        <div class="mission__right">
+          <div class="net" id="net">
+            <svg viewBox="0 0 100 100" class="net__lines" id="netLines" aria-hidden="true"></svg>
+          </div>
+          <p class="mono net__caption">Live command network · orders from the captain's chair</p>
+        </div>
+      </div>
+      <div class="pace">
+        <div class="pace__head"><span class="eyebrow">The plan</span><span class="mono">Target pace · <b class="accent">~4.6M views / week</b> · 13 weeks</span></div>
+        <svg viewBox="0 0 1000 260" id="pace" preserveAspectRatio="none" aria-label="Planned cumulative views per week rising to 60 million"></svg>
+      </div>
+    </section>
+
+    <!-- ================= CH 01 — RAJA ================= -->
+    <section class="chapter" id="ch-raja">
+      <span class="chapter__num" aria-hidden="true">01</span>
+      <div class="chapter__text">
+        <span class="eyebrow">Chapter 01 — The Captain's board</span>
+        <h2 class="display">It starts on<br>the <span class="accent">board.</span></h2>
+        <div class="chapter__who"><span class="chip"><b>Er. Raja Singh</b> · Team Lead &amp; Manager</span></div>
+        <p>Before a single wire gets cut, Raja maps the whole episode: the idea, the build plan, the shoot, the budget and the deadline. When the plan breaks (it always does), he's the one redrawing it at midnight.</p>
+        <blockquote>“If it doesn't scare us a little, it's not a Builders.mu video.”<cite>— Raja, every Monday</cite></blockquote>
+      </div>
+      <div class="chapter__stage" id="stage-raja">
+        <div class="stage-hud"><span>WHITEBOARD.EXE</span><span>PLAN <b id="raja-pct">0%</b></span></div>
+      </div>
+    </section>
+
+    <!-- ================= STORY — Ratnam ================= -->
+    <section class="story" id="story">
+      <div class="letterbox letterbox--top"></div><div class="letterbox letterbox--bot"></div>
+      <div class="story__inner">
+        <span class="eyebrow">Ratnam Kalra · The Storyteller</span>
+        <p class="story__text display" id="storyText">Every build starts as a lowkey unhinged 2 AM idea. Raja asks one question: can we ship it by Friday? Sudhanshu says physics said no. Aryan says physics hasn't met his drill. Ratnam writes it all down before anyone touches grass.</p>
+        <div class="retention">
+          <div class="retention__head mono"><span>The shape we write for</span><span>Audience retention</span></div>
+          <svg viewBox="0 0 1000 220" id="retention" preserveAspectRatio="none" aria-label="Retention curve with hook, struggle and payoff">
+            <defs><linearGradient id="retFill" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="rgba(255,122,26,.35)"/><stop offset="1" stop-color="rgba(255,122,26,0)"/></linearGradient></defs>
+            <path class="ret-fill" d="M0,20 C40,22 60,48 120,58 C260,80 420,100 560,108 C640,112 700,96 760,70 C820,46 900,52 1000,64 L1000,220 L0,220 Z" fill="url(#retFill)"/>
+            <path class="ret-line" d="M0,20 C40,22 60,48 120,58 C260,80 420,100 560,108 C640,112 700,96 760,70 C820,46 900,52 1000,64" fill="none" stroke="#ff7a1a" stroke-width="3"/>
+            <g class="ret-mk" font-family="JetBrains Mono" font-size="13" fill="#f3ede2">
+              <line x1="120" y1="0" x2="120" y2="220" stroke="#3a3946" stroke-dasharray="4 6"/><text x="128" y="200">HOOK · 0–5s</text>
+              <line x1="560" y1="0" x2="560" y2="220" stroke="#3a3946" stroke-dasharray="4 6"/><text x="568" y="200">STRUGGLE</text>
+              <line x1="760" y1="0" x2="760" y2="220" stroke="#3a3946" stroke-dasharray="4 6"/><text x="768" y="200">PAYOFF ↑</text>
+            </g>
+          </svg>
+        </div>
+      </div>
+    </section>
+
+    <!-- ================= CH 02 — script typewriter ================= -->
+    <section class="chapter chapter--flip" id="ch-ratnam">
+      <span class="chapter__num" aria-hidden="true">02</span>
+      <div class="chapter__text">
+        <span class="eyebrow">Chapter 02 — The Script · Shinchan episode</span>
+        <h2 class="display">Words before<br><span class="accent">wires.</span></h2>
+        <div class="chapter__who"><span class="chip"><b>Ratnam Kalra</b> · Writer</span><span class="chip"><b>Raja</b> · as the boss</span><span class="chip"><b>Sudhanshu</b> · as the sensor guy</span><span class="chip"><b>Aryan</b> · as the drill guy</span></div>
+        <p>This is how the Shinchan sanitizer was born: 2:47 AM, four grown adults and one very unbothered figurine. Ratnam writes every episode like this, beat by beat, so the edit bay knows exactly where the laughs go.</p>
+        <blockquote>“If the first five seconds don't hurt to skip, rewrite them.”<cite>— Ratnam</cite></blockquote>
+      </div>
+      <div class="chapter__stage stage--paper" id="stage-ratnam">
+        <div class="stage-hud"><span>SHINCHAN_v7_FINAL_final2.fdx</span><span>WORDS <b id="ratnam-words">0</b></span></div>
+        <div class="page-fly"></div><div class="page-fly"></div><div class="page-fly"></div>
+        <div class="script-paper" id="script">
+          <div class="scene ty" data-t="EP. 52 — THE SHINCHAN SANITIZER"></div>
+          <div class="act ty" data-t="INT. BUILDERS.MU WORKSHOP — 2:47 AM. A Shinchan figurine sits on a box. Four grown men stare at it."></div>
+          <div class="char ty" data-t="RAJA"></div>
+          <div class="dlg ty" data-t="Okay. What are we shipping this week?"></div>
+          <div class="char ty" data-t="RATNAM"></div>
+          <div class="dlg ty" data-t="Shinchan. Sanitizer. You put your hand out… and he pees on it."></div>
+          <div class="char ty" data-t="SUDHANSHU"></div>
+          <div class="dlg ty" data-t="IR sensor, tiny pump. I can wire it tonight."></div>
+          <div class="char ty" data-t="ARYAN"></div>
+          <div class="dlg ty" data-t="I'll drill the hole. Don't ask where."></div>
+          <div class="char ty" data-t="RAJA"></div>
+          <div class="dlg ty" data-t="Just ship it."></div>
+          <div class="act ty" data-t="Shinchan stares back. Unbothered. SMASH CUT TO:"></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ================= CH 03 — BUILDERS: 72h time-lapse ================= -->
+    <section class="chapter" id="ch-builders">
+      <span class="chapter__num" aria-hidden="true">03</span>
+      <div class="chapter__text">
+        <span class="eyebrow">Chapter 03 — The Backbone</span>
+        <h2 class="display">Day. Night.<br><span class="accent">Build.</span></h2>
+        <div class="duo">
+          <div class="duo__card" style="--a:#4fd1ff"><span class="duo__mono display">SK</span><div><b>Sudhanshu Kumar Jaiswal</b><span>Electronics · firmware · 3 AM debugging</span></div></div>
+          <div class="duo__card" style="--a:#5cf2a2"><span class="duo__mono display">AS</span><div><b>Aryan Sagar</b><span>Mechanics · fabrication · the drill</span></div></div>
+        </div>
+        <p>This is where the video actually gets made. Sudhanshu runs electronics and firmware, Aryan runs mechanics and fabrication, and together they turn a whiteboard sketch into a machine that works on camera. Scroll and watch the clock.</p>
+        <div class="build-stats">
+          <div><b><span id="st-hours">0</span>h</b><span>On the bench</span></div>
+          <div><b id="st-chai">0</b><span>Cups of chai</span></div>
+          <div><b id="st-bugs">0</b><span>Bugs squashed</span></div>
+        </div>
+      </div>
+      <div class="chapter__stage" id="stage-builders">
+        <div class="stage-hud"><span>DAY <b id="b-day">01</b></span><span id="b-time">09:00 AM</span></div>
+        <div class="build-log" id="build-log">
+          <div>&gt; flashing firmware v0.1 …</div>
+          <div>&gt; servo_3: no response ✗</div>
+          <div>&gt; swapped buck converter</div>
+          <div>&gt; servo_3: ok ✓</div>
+          <div>&gt; printing arm_v4.stl (6h)</div>
+          <div>&gt; PID tuned · kp=2.4</div>
+          <div>&gt; pour_test: 210ml in 9.1s</div>
+          <div>&gt; status: IT WORKS 🔥</div>
+        </div>
+</div>
+      </div>
+    </section>
+
+    <!-- ================= CH 04 — EDITORS ================= -->
+    <section class="chapter chapter--flip" id="ch-editors">
+      <span class="chapter__num" aria-hidden="true">04</span>
+      <div class="chapter__text">
+        <span class="eyebrow">Chapter 04 — The Cut</span>
+        <h2 class="display">Then the<br><span class="accent">magic</span> edit.</h2>
+        <div class="duo">
+          <div class="duo__card" style="--a:#a78bfa"><span class="duo__mono display">P</span><div><b>Prateek</b><span>Story cut · pacing · sound design</span></div></div>
+          <div class="duo__card" style="--a:#ff5c8a"><span class="duo__mono display">V</span><div><b>Virendra</b><span>Colour · motion graphics · thumbnails</span></div></div>
+        </div>
+        <p>Seventy-two hours of footage goes in. Twelve minutes you can't stop watching comes out. Prateek owns the story cut, pacing and sound design; Virendra owns colour, motion graphics and the thumbnail that made you click.</p>
+        <blockquote>“If you noticed the cut, we did it wrong.”<cite>— Prateek &amp; Virendra</cite></blockquote>
+      </div>
+      <div class="chapter__stage" id="stage-editors">
+        <div class="stage-hud"><span>EP47_ROBOT_CHAIWALA.prproj</span><span>RENDER <b id="ed-pct">0%</b></span></div>
+        <div class="editor">
+          <div class="ed-cursor" id="curP" style="--a:#a78bfa" aria-hidden="true"><svg viewBox="0 0 16 20"><path d="M1,1 L1,16 L5,12 L8,19 L11,17.6 L8,11 L14,11 Z"/></svg><span class="ed-cursor__tag"><b>Prateek</b><i>cutting the hook</i></span></div>
+          <div class="ed-cursor" id="curV" style="--a:#ff5c8a" aria-hidden="true"><svg viewBox="0 0 16 20"><path d="M1,1 L1,16 L5,12 L8,19 L11,17.6 L8,11 L14,11 Z"/></svg><span class="ed-cursor__tag"><b>Virendra</b><i>colour grade</i></span></div>
+          <div class="editor__view">
+            <div class="editor__rec">PROGRAM</div>
+            <div class="editor__frame"></div>            <div class="editor__frame"></div>            <div class="editor__frame"></div>            <div class="editor__frame"></div>            <div class="editor__tc" id="tc">00:00:00:00</div>
+          </div>
+          <div class="editor__tl" id="timeline">
+            <div class="playhead" id="playhead"></div>
+            <div class="track"><span class="track__label">T1</span><div class="clip clip--t" style="left:30%;width:22%">TITLE</div><div class="clip clip--t" style="left:80%;width:16%">END CARD</div></div>
+            <div class="track"><span class="track__label">V2</span><div class="clip clip--b" style="left:12%;width:18%">B-roll</div><div class="clip clip--b" style="left:44%;width:14%">macro</div><div class="clip clip--b" style="left:66%;width:12%">drone</div></div>
+            <div class="track"><span class="track__label">V1</span><div class="clip clip--v" style="left:4%;width:26%">A-roll · hook</div><div class="clip clip--v" style="left:31%;width:34%">build montage</div><div class="clip clip--v" style="left:66%;width:30%">payoff</div></div>
+            <div class="track"><span class="track__label">A1</span><div class="clip clip--a" style="left:4%;width:92%" id="wave"></div></div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ================= CH 05 — SAHIL ================= -->
+    <section class="chapter" id="ch-sahil">
+      <span class="chapter__num" aria-hidden="true">05</span>
+      <div class="chapter__text">
+        <span class="eyebrow">Chapter 05 — The Procurer</span>
+        <h2 class="display">Need a part?<br><span class="accent">Sahil.</span></h2>
+        <div class="chapter__who"><span class="chip"><b>Sahil</b> · Producer</span></div>
+        <p>Twenty vendor calls before lunch. Three markets before dinner. Sahil runs production (budgets, permissions, logistics) and somehow always comes back with the one component nobody in the city had in stock.</p>
+        <ul class="checklist" id="checklist">
+          <li><i></i>40 × MG996R servo motors</li>
+          <li><i></i>20 m addressable LED strip</li>
+          <li><i></i>12 × 18650 Li-ion cells</li>
+          <li><i></i>Shoot location permission</li>
+        </ul>
+      </div>
+      <div class="chapter__stage" id="stage-sahil">
+        <div class="stage-hud"><span>ROUTE · DELHI NCR</span><span>DIST <b id="km">0.0 km</b></span></div>
+        <div class="call-bubble out" style="top:14%">Bhaiya, 40 servo milenge? Urgent hai 🙏</div>
+        <div class="call-bubble in" style="top:26%">Kal subah aa jao, rakh dunga.</div>
+        <div class="call-bubble out" style="top:38%">Kal nahi bhaiya, aaj shoot hai!</div>
+        <div class="call-bubble in" style="top:50%">Theek hai… 1 ghante mein aao 😅</div>
+      </div>
+    </section>
+
+    <!-- ================= PIPELINE (horizontal scroll) ================= -->
+    <section class="pipeline" id="pipeline">
+      <div class="pipeline__head">
+        <span class="eyebrow">How a video gets made</span>
+        <h2 class="display">Idea → <span class="accent">Upload</span></h2>
+      </div>
+      <div class="pipeline__line"><i></i></div>
+      <div class="pipeline__track">
+        <article class="step"><span class="step__n">01</span><div><span class="mono">Er. Raja Singh</span><h3>Pitch</h3><p>An idea crazy enough to film, a deadline and a budget. Then everyone gets to work.</p></div></article>
+        <article class="step"><span class="step__n">02</span><div><span class="mono">Ratnam Kalra</span><h3>Script</h3><p>Hook in 5 seconds. Story beats. What could go wrong (on camera).</p></div></article>
+        <article class="step step--img" style="--img:url(../assets/img/market-shop.jpg)"><span class="step__n">03</span><div><span class="mono">Sahil</span><h3>Source</h3><p>Parts, permissions, locations. Markets, calls, negotiation.</p></div></article>
+        <article class="step step--img" style="--img:url(../assets/img/solder-bench.jpg)"><span class="step__n">04</span><div><span class="mono">Sudhanshu · Aryan</span><h3>Build</h3><p>Circuits, code, CAD, metal. Break it. Fix it. Make it work.</p></div></article>
+        <article class="step step--img" style="--img:url(../assets/img/robot-arm.jpg)"><span class="step__n">05</span><div><span class="mono">Everyone</span><h3>Shoot</h3><p>A-roll, B-roll, and the slow-mo of the first test.</p></div></article>
+        <article class="step step--img" style="--img:url(../assets/img/edit-laptop.jpg)"><span class="step__n">06</span><div><span class="mono">Prateek · Virendra</span><h3>Edit</h3><p>Cut, colour, sound, graphics, thumbnail. Then upload.</p></div></article>
+        <article class="step step--ship"><span class="step__n">07</span><img src="assets/yt/just-ship-it.jpg" alt="Just ship it." class="step__badge"><div><span class="mono">Everyone</span><h3>Ship it.</h3><p>No waiting for perfect. Upload, learn, build the next one.</p></div></article>
+      </div>
+    </section>
+
+    <!-- ================= TEAM (drag rail) ================= -->
+    <section class="team" id="team">
+      <div class="wrap team__head">
+        <div><span class="eyebrow">The crew</span><h2 class="display">Seven<br><span class="accent">builders</span></h2></div>
+        <p class="mono" style="color:var(--ink-mute)">← Drag →</p>
+      </div>
+      <div class="team__rail" id="team-rail"></div>
+    </section>
+
+    <div class="marquee marquee--orange"><div class="marquee__track">
+      <span>Just ship it</span><span>Subscribe on YouTube</span><span>Follow @builders.mu</span>
+      <span>Just ship it</span><span>Subscribe on YouTube</span><span>Follow @builders.mu</span>
+    </div></div>
+
+    <!-- ================= LAB EXHIBIT — Shinchan sanitizer ================= -->
+    <section class="sani" id="sanitizer">
+      <div class="wrap sani__grid">
+        <div class="sani__text">
+          <span class="eyebrow">From the lab · Try it yourself</span>
+          <h2 class="display">Put your hand<br>in front. <span class="accent">We dare you.</span></h2>
+          <p>Our most-asked build: a Shinchan sanitizer dispenser. A sensor in the base spots your hand, and Shinchan does what Shinchan does best. Move your cursor (or tap) in front of the sensor.</p>
+          <div class="sani__stats">
+            <div><b id="saniCount">0</b><span>Hands sanitized</span></div>
+            <div><b id="saniLaughs">0</b><span>Team laughs</span></div>
+          </div>
+          <a class="btn magnetic" href="https://www.youtube.com/shorts/gvQlI_AUGwk" target="_blank" rel="noopener">Watch the build ▶</a>
+        </div>
+        <div class="sani__stage" id="saniStage" data-cursor="hand" aria-label="Interactive Shinchan sanitizer: move your cursor in front of the sensor">
+          <div class="sani__crowd" id="saniCrowd" aria-hidden="true"></div>
+          <div class="sani__gadget">
+            <img src="assets/yt/shinchan-gadget.jpg" alt="The Builders.mu Shinchan sanitizer dispenser" draggable="false">
+            <span class="sani__sensor" aria-hidden="true"></span>
+            <span class="sani__label mono">SENSOR · IR</span>
+          </div>
+          <svg class="sani__fx" id="saniFx" aria-hidden="true">
+            <g id="saniDrops"></g>
+          </svg>
+          <div class="sani__bubbles" id="saniBubbles" aria-hidden="true"></div>
+          <div class="sani__hint mono" id="saniHint">✋ Bring your hand here</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ================= CONTENT HUB ================= -->
+    <section class="hub wrap">
+      <div class="hub__section" id="uploads">
+        <div class="hub__head"><div><span class="eyebrow">Fresh off the edit bay</span><h2 class="display">Latest Shorts</h2></div><a class="link-arrow" data-yt href="#" target="_blank" rel="noopener">All 68 videos on YouTube</a></div>
+        <div class="shorts" id="videos" data-cursor="drag"></div>
+      </div>
+      <div class="hub__section" id="insta-sec">
+        <div class="hub__head"><div><span class="eyebrow">Behind the scenes</span><h2 class="display">@builders.mu</h2></div><a class="link-arrow" data-ig href="#" target="_blank" rel="noopener">Follow on Instagram</a></div>
+        <div class="insta" id="insta"></div>
+      </div>
+      <div class="hub__section" id="blog-sec">
+        <div class="hub__head"><div><span class="eyebrow">Build logs</span><h2 class="display">From the blog</h2></div><a class="link-arrow" href="#">All posts</a></div>
+        <div class="blog" id="blog"></div>
+      </div>
+      <div class="hub__section" id="community-sec" style="margin-bottom:0">
+        <div class="hub__head"><div><span class="eyebrow">Join the crew</span><h2 class="display">By the numbers</h2></div></div>
+        <div class="community" id="community"></div>
+      </div>
+    </section>
+  </main>
+
+  <!-- ================= FOOTER ================= -->
+  <footer class="footer">
+    <span class="eyebrow">Got a crazy idea? Want to collab?</span>
+    <h2 class="footer__cta display" style="margin-top:16px">Just<br><a href="mailto:hello@builders.mu.com" class="magnetic" id="mail">ship it.</a><svg class="footer__scribble" viewBox="0 0 300 30" aria-hidden="true"><path d="M4,18 C70,8 160,6 296,14 M30,26 C110,18 190,18 270,24"/></svg></h2>
+    <div class="footer__grid">
+      <div><img src="assets/yt/just-ship-it.jpg" alt="Just ship it." class="footer__badge"><p style="color:var(--ink-dim);max-width:340px;margin-top:12px">Seven people. One workshop. Building cool stuff at Masters' Union, one weird build at a time.</p></div>
+      <div><h4>Watch</h4><a data-yt href="#" target="_blank" rel="noopener">YouTube</a><a data-ig href="#" target="_blank" rel="noopener">Instagram</a></div>
+      <div><h4>Site</h4><a href="#workshop">Workshop</a><a href="#mission">Mission 60M</a><a href="#team">Crew</a></div>
+      <div><h4>Contact</h4><a href="mailto:hello@builders.mu.com">hello@builders.mu.com</a><a data-li href="#" target="_blank" rel="noopener">LinkedIn</a></div>
+    </div>
+    <div class="footer__big" aria-hidden="true">BUILDERS.MU</div>
+    <div class="footer__base"><span>© 2026 Builders.mu · Just ship it.</span><span>Made with Three.js, GSAP, solder &amp; chai</span></div>
+    <details class="credits"><summary class="mono">Photo credits</summary><ul id="credits"></ul></details>
+  </footer>
+
+  <script src="https://cdn.jsdelivr.net/npm/gsap@3.13.0/dist/gsap.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/gsap@3.13.0/dist/ScrollTrigger.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/gsap@3.13.0/dist/MotionPathPlugin.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/gsap@3.13.0/dist/Draggable.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/gsap@3.13.0/dist/InertiaPlugin.min.js"></script>
+  <script src="https://unpkg.com/lenis@1.1.13/dist/lenis.min.js"></script>
+  <script src="js/data.js"></script>
+  <script src="js/content.js"></script>
+  <script src="js/scenes.js"></script>
+  <script src="js/main.js"></script>
+  <script type="module" src="js/workshop3d.js"></script>
+</body>
+</html>
