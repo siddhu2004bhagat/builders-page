@@ -232,21 +232,21 @@
       </div>
     </section>
 
-    <!-- ================= CH 03½ — THE REVEAL ================= -->
-    <section class="chapter chapter--flip" id="ch-reveal">
-      <span class="chapter__num" aria-hidden="true">3½</span>
-      <div class="chapter__text">
-        <span class="eyebrow">Chapter 03½ — The reveal</span>
-        <h2 class="display">Maa<br><span class="accent">kasam.</span></h2>
-        <p>Every time Sudhanshu and Aryan pull off something insane, the workshop sounds exactly the same. Raja grabs his head: <b>“Maa kasam!”</b> Ratnam just screams <b>“crazyyyy…”</b>. Prateek is already filming, Virendra's clapping, Sahil's hyping. Then everyone crowds the bench.</p>
-        <div class="build-stats">
+    <!-- ================= CH 03½ — THE REVEAL (open space, pinned) ================= -->
+    <section class="reveal" id="ch-reveal">
+      <div class="reveal__bigword display" aria-hidden="true">MAA KASAM</div>
+      <div class="reveal__stage" id="stage-reveal"></div>
+      <div class="reveal__works display" aria-hidden="true">IT WORKS.</div>
+      <div class="reveal__flash" aria-hidden="true"></div>
+      <div class="reveal__head"><span class="eyebrow">Chapter 03½ — The reveal</span><span class="mono reveal__hype">HYPE <b id="rv-hype">0%</b></span></div>
+      <div class="reveal__caption">
+        <h2 class="display">Respect to the <span class="accent">engineers.</span></h2>
+        <p>Every time Sudhanshu and Aryan pull off something insane, the workshop sounds exactly the same. Raja grabs his head: <b>“Maa kasam!”</b> Ratnam just screams <b>“crazyyyy…”</b> And then everyone crowds the bench.</p>
+        <div class="reveal__stats">
           <div><b id="rv-mk">0</b><span>Maa kasams this month</span></div>
-          <div><b><span id="rv-y">0</span></b><span>Y's in Ratnam's crazy</span></div>
+          <div><b id="rv-y">0</b><span>Y's in Ratnam's crazy</span></div>
           <div><b><span id="rv-r">0</span>%</b><span>Respect for engineers</span></div>
         </div>
-      </div>
-      <div class="chapter__stage stage--reveal" id="stage-reveal">
-        <div class="stage-hud"><span><span class="rec">REC</span> THE REVEAL</span><span>HYPE <b id="rv-hype">0%</b></span></div>
       </div>
     </section>
 
@@ -355,9 +355,15 @@
         <div class="sani__stage" id="saniStage" data-cursor="hand" aria-label="Interactive Shinchan sanitizer: move your cursor in front of the sensor">
           <div class="sani__crowd" id="saniCrowd" aria-hidden="true"></div>
           <div class="sani__gadget">
-            <img src="assets/yt/shinchan-gadget.jpg" alt="The Builders.mu Shinchan sanitizer dispenser" draggable="false">
-            <span class="sani__sensor" aria-hidden="true"></span>
-            <span class="sani__label mono">SENSOR · IR</span>
+            <img class="sani__fig" src="assets/yt/shinchan-figurine.png" alt="The Builders.mu Shinchan sanitizer dispenser" draggable="false">
+            <div class="sani__base" aria-hidden="true">
+              <i class="sani__top"></i><i class="sani__side"></i>
+              <div class="sani__front">
+                <div class="sani__module"><span>13</span><span class="sani__sensor"></span></div>
+                <span class="sani__brand mono">BUILDERS.MU<br>SANITIZER v2</span>
+              </div>
+            </div>
+            <span class="sani__label mono">IR SENSOR · PUMP · 5V</span>
           </div>
           <svg class="sani__fx" id="saniFx" aria-hidden="true">
             <g id="saniDrops"></g>

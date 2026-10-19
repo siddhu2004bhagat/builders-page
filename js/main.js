@@ -227,7 +227,10 @@
     // network
     const lines = $$(".net__line");
     lines.forEach((l) => { const L = Math.hypot(l.x2.baseVal.value - 50, l.y2.baseVal.value - 50); gsap.set(l, { strokeDasharray: L, strokeDashoffset: L }); });
-    gsap.set(".node", { xPercent: -50, yPercent: -50, scale: 0, autoAlpha: 0 }); gsap.set(".node__order", { autoAlpha: 0, y: 8 });
+    // anchor every node at the centre of its face, so lines, pulses and Raja's rings meet the photos exactly
+    const anchorNodes = () => $$(".node").forEach((n) => { const f = $(".node__face", n), c = f.offsetTop + f.offsetHeight / 2; gsap.set(n, { xPercent: -50, yPercent: 0, y: -c, transformOrigin: `50% ${c}px` }); });
+    anchorNodes(); addEventListener("resize", anchorNodes);
+    gsap.set(".node", { scale: 0, autoAlpha: 0 }); gsap.set(".node__order", { autoAlpha: 0, y: 8 });
     gsap.set(".pace__bar", { scaleY: 0, transformOrigin: "50% 100%" });
     if (!reduce) {
       $$(".net__pulse").forEach((p, i) => { const l = lines[i]; gsap.fromTo(p, { attr: { cx: 50, cy: 50 }, autoAlpha: 1 }, { attr: { cx: l.x2.baseVal.value, cy: l.y2.baseVal.value }, autoAlpha: 0.2, duration: 1.4, ease: "power1.in", repeat: -1, delay: i * 0.23, repeatDelay: 0.6 }); });
@@ -366,52 +369,74 @@
       .to(cups, { scale: 1, stagger: 0.11, duration: 0.04, ease: "back.out(3)" }, 0.05)
       .to(logs, { autoAlpha: 1, stagger: 0.11, duration: 0.03 }, 0.05)
       .to($$(".rb-eye", st), { attr: { fill: "#4fd1ff" }, duration: 0.03 }, 0.94)
+      .to(st, { boxShadow: "0 0 90px rgba(255,122,26,.45)", borderColor: "rgba(255,122,26,.7)", duration: 0.04 }, 0.95)
       .to(q(".b-robot"), { y: "-=10", duration: 0.03, yoyo: true, repeat: 1, ease: "power2.out" }, 0.95);
   })();
 
   /* ==========================================================
-     CH 03½ — THE REVEAL: cloth off, "MAA KASAM!", "CRAZYYYY…"
+     CH 03½ — THE REVEAL (open space): camera pulls back from the
+     finished robot → Raja runs in, "MAA KASAM!!" → the whole team
+     piles in and celebrates the engineers
      ========================================================== */
   (function reveal() {
     const sec = $("#ch-reveal"), st = $("#stage-reveal");
     const q = (c) => $(c, st), qa = (c) => $$(c, st);
-    const bubs = qa(".rv-bub, .rv-badge"), conf = qa(".rv-conf"), crazy = q(".rv-crazy");
-    gsap.set(bubs, { scale: 0, transformOrigin: "50% 100%" });
-    gsap.set(conf, { y: -40, opacity: 0 });
-    // the crowd is always buzzing; Raja can't stop shaking his head
+    const P = (id) => q(`.rv-person--${id}`), world = q("#rvWorld"), crazy = q(".rv-crazy"), conf = qa(".rv-conf");
+    gsap.set(qa(".rv-bub, .rv-badge"), { scale: 0, transformOrigin: "50% 100%" });
+    gsap.set(conf, { y: -60, opacity: 0 });
+    gsap.set(qa(".rv-robot .rb-eye"), { attr: { fill: "#4fd1ff" } });
     if (!reduce) {
-      qa(".rv-body").forEach((b, i) => gsap.to(b, { y: -6, duration: 0.28 + (i % 3) * 0.05, yoyo: true, repeat: -1, ease: "sine.inOut", delay: i * 0.07 }));
+      qa(".rv-body").forEach((b, i) => gsap.to(b, { y: -9, duration: 0.3 + (i % 3) * 0.05, yoyo: true, repeat: -1, ease: "sine.inOut", delay: i * 0.07 }));
       gsap.to(q(".rv-person--raja .rv-head"), { rotation: 7, transformOrigin: "50% 100%", duration: 0.18, yoyo: true, repeat: -1, ease: "sine.inOut" });
       gsap.to(qa(".rv-rec"), { opacity: 0.2, duration: 0.5, yoyo: true, repeat: -1 });
+      gsap.to(q(".rv-glow"), { opacity: 0.6, duration: 1.2, yoyo: true, repeat: -1, ease: "sine.inOut" });
     }
-    const counters = { p: 0 };
-    const tl = pinnedTL(sec, 2.4);
-    const swap = (id, from, to, at) => tl.to(q(`.rv-person--${id} .rv-pose--${from}`), { opacity: 0, duration: 0.02 }, at).to(q(`.rv-person--${id} .rv-pose--${to}`), { opacity: 1, duration: 0.02 }, at);
-    const pop = (sel, at) => tl.to(q(sel), { scale: 1, duration: 0.06, ease: "back.out(3)" }, at);
-    tl.to(q(".rv-cloth"), { x: 170, y: -280, rotation: 38, opacity: 0, duration: 0.14, ease: "power2.in" }, 0.03)
-      .to(qa(".rv-spot, .rv-glow"), { opacity: 1, duration: 0.08 }, 0.08)
-      .to(qa(".rv-robot .rb-eye"), { attr: { fill: "#4fd1ff" }, duration: 0.02 }, 0.12);
-    swap("sudhanshu", "down", "up", 0.18); swap("aryan", "down", "up", 0.19);
-    pop(".rv-badge--s", 0.2); pop(".rv-badge--a", 0.21);
-    swap("raja", "down", "head", 0.3);
-    pop(".rv-bub--raja", 0.31);
-    tl.to(q(".rv-bub--raja"), { rotation: -7, duration: 0.012, yoyo: true, repeat: 7, ease: "none" }, 0.37);
-    swap("ratnam", "down", "up", 0.42);
-    pop(".rv-bub--ratnam", 0.43);
+    const tl = gsap.timeline({ defaults: { ease: "none" }, scrollTrigger: { trigger: sec, start: "top top", end: () => "+=" + innerHeight * 4.2, pin: true, scrub: 0.9, anticipatePin: 1 } });
+    const swap = (id, from, to, at) => tl.to(q(`.rv-person--${id} .rv-pose--${from}`), { opacity: 0, duration: 0.01 }, at).to(q(`.rv-person--${id} .rv-pose--${to}`), { opacity: 1, duration: 0.01 }, at);
+    const pop = (sel, at) => tl.to(q(sel), { scale: 1, duration: 0.04, ease: "back.out(3)" }, at);
+    const run = (id, fromX, toX, at, dur) => tl.fromTo(P(id), { x: fromX }, { x: toX, duration: dur, ease: "power1.out" }, at).to(P(id), { y: "-=16", duration: dur / 8, yoyo: true, repeat: 7, ease: "sine.inOut" }, at);
+
+    // 1) camera pulls back from the robot the engineers just finished
+    tl.fromTo(world, { scale: 2.3, svgOrigin: "800 560" }, { scale: 1, svgOrigin: "800 560", duration: 0.13, ease: "power2.inOut" }, 0)
+      .fromTo(".reveal__works", { yPercent: -50, xPercent: -50, scale: 1, opacity: 1 }, { scale: 0.45, y: -60, opacity: 0, duration: 0.1 }, 0.04)
+      .fromTo(".reveal__flash", { opacity: 0 }, { opacity: 0.85, duration: 0.025, yoyo: true, repeat: 1 }, 0.01);
+    // 2) Raja runs in, grabs his head: MAA KASAM!!
+    run("raja", -420, 250, 0.12, 0.12);
+    swap("raja", "down", "head", 0.245);
+    pop(".rv-bub--raja", 0.25);
+    tl.fromTo(".reveal__bigword", { xPercent: -50, yPercent: -50, opacity: 0, scale: 1.25 }, { xPercent: -50, yPercent: -50, opacity: 1, scale: 1, duration: 0.05, ease: "power3.out" }, 0.25)
+      .to(world, { x: 10, duration: 0.006, yoyo: true, repeat: 9 }, 0.26)
+      .to(q(".rv-bub--raja"), { rotation: -6, duration: 0.008, yoyo: true, repeat: 7 }, 0.27);
+    // 3) the engineers step out from behind their robot
+    tl.fromTo(P("sudhanshu"), { x: 800 }, { x: 600, duration: 0.08, ease: "power2.out" }, 0.34)
+      .fromTo(P("aryan"), { x: 800 }, { x: 1000, duration: 0.08, ease: "power2.out" }, 0.35);
+    swap("sudhanshu", "down", "up", 0.43); swap("aryan", "down", "up", 0.44);
+    pop(".rv-badge--s", 0.44); pop(".rv-badge--a", 0.45);
+    // 4) everyone else piles in
+    run("ratnam", 1950, 1330, 0.38, 0.11);
+    swap("ratnam", "down", "up", 0.495); pop(".rv-bub--ratnam", 0.5);
     const yy = { n: 0 };
-    tl.to(yy, { n: 9, duration: 0.4, onUpdate() {
+    tl.to(yy, { n: 9, duration: 0.32, onUpdate() {
       const n = Math.round(yy.n);
       crazy.textContent = "CRAZY" + "Y".repeat(n) + "…";
-      crazy.setAttribute("font-size", 30 - n * 1.2);
+      crazy.setAttribute("font-size", 56 - n * 2.2);
       $("#rv-y").textContent = n + 1;
-    } }, 0.44);
-    swap("prateek", "down", "camera", 0.5); swap("virendra", "down", "clap", 0.52); swap("sahil", "down", "up", 0.54);
-    pop(".rv-bub--sahil", 0.55); pop(".rv-bub--vir", 0.56);
-    tl.fromTo(conf, { y: -40, x: 0, rotation: 0, opacity: 1 }, { y: () => 560 + Math.random() * 80, x: () => gsap.utils.random(-60, 60), rotation: () => gsap.utils.random(-540, 540), opacity: 1, duration: 0.4, stagger: { each: 0.004, from: "random" }, ease: "none" }, 0.56);
-    tl.to(counters, { p: 1, duration: 1, onUpdate() {
-      $("#rv-mk").textContent = Math.round(counters.p * 147);
-      $("#rv-r").textContent = Math.round(Math.min(1, counters.p * 1.6) * 100);
-      $("#rv-hype").textContent = Math.round(counters.p * 100) + "%";
+    } }, 0.51);
+    run("prateek", -380, 440, 0.44, 0.11); swap("prateek", "down", "camera", 0.555);
+    run("virendra", 1950, 1170, 0.48, 0.11); swap("virendra", "down", "clap", 0.595); pop(".rv-bub--vir", 0.6);
+    run("sahil", 1950, 1470, 0.52, 0.11); swap("sahil", "down", "up", 0.635); pop(".rv-bub--sahil", 0.64);
+    // 5) everyone turns to the engineers
+    [["raja", 9], ["prateek", 8], ["ratnam", -9], ["virendra", -8], ["sahil", -8]].forEach(([id, r], i) =>
+      tl.to(q(`.rv-person--${id} .rv-body`), { rotation: r, transformOrigin: "50% 100%", duration: 0.05, ease: "power2.out" }, 0.67 + i * 0.01));
+    tl.to(".reveal__bigword", { opacity: 0.35, duration: 0.08 }, 0.68)
+      .fromTo(".reveal__caption", { xPercent: -50, opacity: 0, y: -20 }, { xPercent: -50, opacity: 1, y: 0, duration: 0.06 }, 0.7)
+      .to(q(".rv-bub--ratnam"), { y: "+=40", duration: 0.05 }, 0.7)
+      .fromTo(conf, { y: -60, x: 0, rotation: 0, opacity: 0 }, { y: () => 860 + Math.random() * 120, x: () => gsap.utils.random(-90, 90), rotation: () => gsap.utils.random(-540, 540), opacity: 1, duration: 0.36, stagger: { each: 0.0025, from: "random" } }, 0.62);
+    const c = { p: 0 };
+    tl.to(c, { p: 1, duration: 1, onUpdate() {
+      $("#rv-mk").textContent = Math.round(Math.max(0, (c.p - 0.25) / 0.75) * 147);
+      $("#rv-r").textContent = Math.round(Math.min(1, Math.max(0, (c.p - 0.4) / 0.35)) * 100);
+      $("#rv-hype").textContent = Math.round(c.p * 100) + "%";
     } }, 0);
   })();
 
@@ -505,7 +530,7 @@
      sensor → sanitizer arc follows the hand, team laughs
      ========================================================== */
   (function sanitizer() {
-    const sec = $("#sanitizer"), stage = $("#saniStage"), img = $(".sani__gadget img"), sensor = $(".sani__sensor");
+    const sec = $("#sanitizer"), stage = $("#saniStage"), img = $(".sani__fig"), sensor = $(".sani__sensor");
     const dropsG = $("#saniDrops"), bubbles = $("#saniBubbles"), fans = $$(".fan");
     const NS = "http://www.w3.org/2000/svg";
     const jokes = ["HAHAHA 😂", "bhai 💀", "again! again!", "Shinchan pls 😭", "LMAOOO", "🤣🤣🤣", "sanitized 💦", "kya bana diya 😂"];
@@ -513,7 +538,7 @@
     let hand = null, on = false, touchT = 0, count = 0, laughs = 0, visible = false, last = null;
     const local = (e) => { const r = stage.getBoundingClientRect(); return { x: e.clientX - r.left, y: e.clientY - r.top }; };
     const at = (el, fx, fy) => { const r = el.getBoundingClientRect(), s = stage.getBoundingClientRect(); return { x: r.left - s.left + r.width * fx, y: r.top - s.top + r.height * fy }; };
-    const origin = () => at(img, 0.37, 0.53);     // where Shinchan... dispenses
+    const origin = () => at(img, 0.07, 0.86);     // where Shinchan... dispenses
     const sensorPt = () => at(sensor, 0.5, 0.5);
     function inFront() {
       if (!hand) return false;

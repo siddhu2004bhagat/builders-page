@@ -294,36 +294,35 @@
     </g>`;
   }
   function revealScene() {
-    const conf = Array.from({ length: 70 }, (_, i) => `<rect class="rv-conf" x="${(i * 53) % 800}" y="-20" width="${6 + (i % 3) * 2}" height="${10 + (i % 4) * 2}" rx="1.5" fill="${["#ff7a1a", "#4fd1ff", "#5cf2a2", "#ffd23f", "#ff5c8a", "#a78bfa", "#f3ede2"][i % 7]}"/>`).join("");
-    const burst = (cx, cy, r1, r2, n) => Array.from({ length: n * 2 }, (_, i) => { const a = (i / (n * 2)) * Math.PI * 2, r = i % 2 ? r2 : r1; return `${(cx + Math.cos(a) * r * 1.5).toFixed(1)},${(cy + Math.sin(a) * r).toFixed(1)}`; }).join(" ");
+    const conf = Array.from({ length: 110 }, (_, i) => `<rect class="rv-conf" x="${(i * 97) % 1600}" y="-30" width="${10 + (i % 3) * 4}" height="${16 + (i % 4) * 4}" rx="2" fill="${["#ff7a1a", "#4fd1ff", "#5cf2a2", "#ffd23f", "#ff5c8a", "#a78bfa", "#f3ede2"][i % 7]}"/>`).join("");
+    const burst = (cx, cy, r1, r2, n) => Array.from({ length: n * 2 }, (_, i) => { const a = (i / (n * 2)) * Math.PI * 2, r = i % 2 ? r2 : r1; return `${(cx + Math.cos(a) * r * 1.45).toFixed(1)},${(cy + Math.sin(a) * r).toFixed(1)}`; }).join(" ");
     return `
-    <svg viewBox="0 0 800 600" xmlns="http://www.w3.org/2000/svg" aria-label="The team celebrating the engineers' build: Raja says Maa kasam, Ratnam yells crazy">
+    <svg viewBox="0 0 1600 900" preserveAspectRatio="xMidYMax meet" xmlns="http://www.w3.org/2000/svg" aria-label="The team celebrating the engineers' build: Raja says Maa kasam, Ratnam yells crazy">
       <defs>
-        <linearGradient id="rvWall" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#18161f"/><stop offset="1" stop-color="#0f0e14"/></linearGradient>
-        <linearGradient id="rvSpot" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="rgba(255,226,170,.55)"/><stop offset="1" stop-color="rgba(255,226,170,0)"/></linearGradient>
-        <radialGradient id="rvGlow"><stop offset="0" stop-color="rgba(255,150,60,.5)"/><stop offset="1" stop-color="rgba(255,150,60,0)"/></radialGradient>
+        <linearGradient id="rvSpot" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="rgba(255,226,170,.5)"/><stop offset="1" stop-color="rgba(255,226,170,0)"/></linearGradient>
+        <radialGradient id="rvGlow"><stop offset="0" stop-color="rgba(255,140,50,.55)"/><stop offset="1" stop-color="rgba(255,140,50,0)"/></radialGradient>
+        <radialGradient id="rvFloor"><stop offset="0" stop-color="rgba(255,170,90,.22)"/><stop offset="1" stop-color="rgba(255,170,90,0)"/></radialGradient>
       </defs>
-      <rect width="800" height="600" fill="url(#rvWall)"/>
-      <rect y="520" width="800" height="80" fill="#0b0a0e"/>
-      <g class="rv-banner"><path d="M150,40 Q400,74 650,40" stroke="#3a3946" stroke-width="2" fill="none"/>${["I", "T", " ", "W", "O", "R", "K", "S"].map((c, i) => `<g transform="translate(${190 + i * 60},${50 + Math.sin((i / 7) * Math.PI) * 14})"><path d="M-20,0 L20,0 L0,34 Z" fill="${["#ff7a1a", "#ffd23f", "#4fd1ff", "#5cf2a2", "#ff5c8a", "#a78bfa", "#ff7a1a", "#ffd23f"][i]}"/><text y="18" text-anchor="middle" font-family="Anton" font-size="15" fill="#111">${c}</text></g>`).join("")}</g>
-      <polygon class="rv-spot" points="370,0 430,0 520,520 280,520" fill="url(#rvSpot)" opacity="0"/>
-      <circle class="rv-glow" cx="400" cy="360" r="170" fill="url(#rvGlow)" opacity="0"/>
-      ${cheer("prateek", 205, 440, 0.92, ["down", "camera"])}
-      ${cheer("sahil", 462, 440, 0.88, ["down", "up"])}
-      ${cheer("virendra", 600, 440, 0.92, ["down", "clap"])}
-      <rect x="320" y="420" width="160" height="14" rx="3" fill="#5a4a3a"/><rect x="335" y="434" width="10" height="90" fill="#3a2d22"/><rect x="455" y="434" width="10" height="90" fill="#3a2d22"/>
-      <g class="rv-robot">${robot(400, 420, 1.6)}</g>
-      <path class="rv-cloth" d="M330,420 C330,330 350,240 400,236 C450,240 470,330 470,420 C450,410 430,426 400,416 C370,426 350,410 330,420 Z" fill="#8a8794" stroke="#6c6a76" stroke-width="2"/>
-      ${cheer("raja", 112, 470, 1.25, ["down", "head"], { x: -36, y: -149 })}
-      ${cheer("sudhanshu", 268, 476, 1.08, ["down", "up"])}
-      ${cheer("aryan", 540, 476, 1.08, ["down", "up"])}
-      ${cheer("ratnam", 690, 470, 1.25, ["down", "up"], { x: -32, y: -155 })}
-      <g class="rv-badge rv-badge--s" transform="translate(268,262)"><rect x="-44" y="-15" width="88" height="28" rx="14" fill="#4fd1ff"/><text y="5" text-anchor="middle" font-family="Anton" font-size="14" fill="#111">ENGINEER 🙇</text></g>
-      <g class="rv-badge rv-badge--a" transform="translate(540,262)"><rect x="-44" y="-15" width="88" height="28" rx="14" fill="#5cf2a2"/><text y="5" text-anchor="middle" font-family="Anton" font-size="14" fill="#111">ENGINEER 🙇</text></g>
-      <g class="rv-bub rv-bub--raja" transform="translate(150,150)"><polygon points="${burst(0, 0, 58, 44, 13)}" fill="#ffd23f" stroke="#111" stroke-width="3"/><text y="-2" text-anchor="middle" font-family="Anton" font-size="30" fill="#111">MAA</text><text y="28" text-anchor="middle" font-family="Anton" font-size="30" fill="#d61f3c">KASAM!!</text></g>
-      <g class="rv-bub rv-bub--ratnam" transform="translate(650,168)"><rect x="-120" y="-34" width="240" height="60" rx="30" fill="#f3ede2" stroke="#111" stroke-width="3"/><path d="M30,24 L48,52 L56,24 Z" fill="#f3ede2" stroke="#111" stroke-width="3" stroke-linejoin="round"/><rect x="28" y="20" width="30" height="8" fill="#f3ede2"/><text class="rv-crazy" y="6" text-anchor="middle" font-family="Anton" font-size="30" fill="#111">CRAZY…</text></g>
-      <g class="rv-bub rv-bub--sahil" transform="translate(462,250)"><rect x="-40" y="-16" width="80" height="28" rx="14" fill="#ffd23f"/><text y="4" text-anchor="middle" font-family="Space Grotesk" font-weight="700" font-size="12" fill="#111">bhai 🔥🔥</text></g>
-      <g class="rv-bub rv-bub--vir" transform="translate(610,262)"><rect x="-34" y="-16" width="68" height="28" rx="14" fill="#ff5c8a"/><text y="4" text-anchor="middle" font-size="13">👏👏👏</text></g>
+      <g id="rvWorld">
+        <ellipse cx="800" cy="860" rx="760" ry="70" fill="url(#rvFloor)"/>
+        <polygon class="rv-spot" points="740,0 860,0 1060,880 540,880" fill="url(#rvSpot)"/>
+        <circle class="rv-glow" cx="800" cy="560" r="300" fill="url(#rvGlow)"/>
+        ${cheer("prateek", 440, 650, 1.85, ["down", "camera"])}
+        ${cheer("virendra", 1170, 650, 1.85, ["down", "clap"])}
+        ${cheer("sahil", 1470, 650, 1.85, ["down", "up"])}
+        ${cheer("sudhanshu", 800, 690, 2.1, ["down", "up"])}
+        ${cheer("aryan", 800, 690, 2.1, ["down", "up"])}
+        <g class="rv-bench"><rect x="640" y="640" width="320" height="24" rx="5" fill="#5a4a3a"/><rect x="640" y="640" width="320" height="5" rx="2" fill="#7a6650"/><rect x="668" y="664" width="18" height="190" fill="#3a2d22"/><rect x="914" y="664" width="18" height="190" fill="#3a2d22"/></g>
+        <g class="rv-robot">${robot(800, 640, 3)}</g>
+        ${cheer("raja", 250, 690, 2.25, ["down", "head"], { x: -36, y: -149 })}
+        ${cheer("ratnam", 1330, 690, 2.25, ["down", "up"], { x: -32, y: -155 })}
+        <g class="rv-badge rv-badge--s" transform="translate(600,330)"><rect x="-86" y="-26" width="172" height="50" rx="25" fill="#4fd1ff"/><text y="9" text-anchor="middle" font-family="Anton" font-size="26" fill="#111">SUDHANSHU 🙇</text></g>
+        <g class="rv-badge rv-badge--a" transform="translate(1000,330)"><rect x="-72" y="-26" width="144" height="50" rx="25" fill="#5cf2a2"/><text y="9" text-anchor="middle" font-family="Anton" font-size="26" fill="#111">ARYAN 🙇</text></g>
+        <g class="rv-bub rv-bub--raja" transform="translate(300,190)"><polygon points="${burst(0, 0, 112, 84, 14)}" fill="#ffd23f" stroke="#111" stroke-width="5"/><text y="-6" text-anchor="middle" font-family="Anton" font-size="62" fill="#111">MAA</text><text y="56" text-anchor="middle" font-family="Anton" font-size="62" fill="#d61f3c">KASAM!!</text></g>
+        <g class="rv-bub rv-bub--ratnam" transform="translate(1290,210)"><rect x="-230" y="-58" width="460" height="108" rx="54" fill="#f3ede2" stroke="#111" stroke-width="5"/><path d="M60,46 L96,104 L108,46 Z" fill="#f3ede2" stroke="#111" stroke-width="5" stroke-linejoin="round"/><rect x="56" y="40" width="56" height="12" fill="#f3ede2"/><text class="rv-crazy" y="16" text-anchor="middle" font-family="Anton" font-size="56" fill="#111">CRAZY…</text></g>
+        <g class="rv-bub rv-bub--sahil" transform="translate(1470,300)"><rect x="-74" y="-26" width="148" height="48" rx="24" fill="#ffd23f"/><text y="7" text-anchor="middle" font-family="Space Grotesk" font-weight="700" font-size="22" fill="#111">bhai 🔥🔥</text></g>
+        <g class="rv-bub rv-bub--vir" transform="translate(1170,300)"><rect x="-62" y="-26" width="124" height="48" rx="24" fill="#ff5c8a"/><text y="8" text-anchor="middle" font-size="24">👏👏👏</text></g>
+      </g>
       <g class="rv-confetti">${conf}</g>
     </svg>`;
   }
