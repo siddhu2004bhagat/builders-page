@@ -530,7 +530,7 @@
      sensor → sanitizer arc follows the hand, team laughs
      ========================================================== */
   (function sanitizer() {
-    const sec = $("#sanitizer"), stage = $("#saniStage"), img = $(".sani__fig"), sensor = $(".sani__sensor");
+    const sec = $("#sanitizer"), stage = $("#saniStage"), img = $(".sani__gadget img"), sensor = $(".sani__sensor");
     const dropsG = $("#saniDrops"), bubbles = $("#saniBubbles"), fans = $$(".fan");
     const NS = "http://www.w3.org/2000/svg";
     const jokes = ["HAHAHA 😂", "bhai 💀", "again! again!", "Shinchan pls 😭", "LMAOOO", "🤣🤣🤣", "sanitized 💦", "kya bana diya 😂"];
@@ -538,7 +538,7 @@
     let hand = null, on = false, touchT = 0, count = 0, laughs = 0, visible = false, last = null;
     const local = (e) => { const r = stage.getBoundingClientRect(); return { x: e.clientX - r.left, y: e.clientY - r.top }; };
     const at = (el, fx, fy) => { const r = el.getBoundingClientRect(), s = stage.getBoundingClientRect(); return { x: r.left - s.left + r.width * fx, y: r.top - s.top + r.height * fy }; };
-    const origin = () => at(img, 0.07, 0.86);     // where Shinchan... dispenses
+    const origin = () => at(img, 0.37, 0.53);     // where Shinchan... dispenses
     const sensorPt = () => at(sensor, 0.5, 0.5);
     function inFront() {
       if (!hand) return false;

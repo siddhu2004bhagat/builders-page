@@ -506,6 +506,7 @@ body::after {
 .fan b { position: absolute; top: 106%; left: 50%; transform: translateX(-50%); font-size: 9px; color: var(--ink-mute); white-space: nowrap; font-weight: 400; }
 .fan__lol { position: absolute; right: -14%; top: -14%; font-style: normal; font-size: clamp(14px, 1.8vw, 26px); opacity: 0; transform: scale(0); }
 .sani__gadget { position: absolute; left: 50%; bottom: 9%; width: 36%; transform: translateX(-30%); z-index: 2; filter: drop-shadow(0 24px 30px rgba(0,0,0,.7)); }
+.sani__gadget img { width: 100%; display: block; border-radius: 14px; border: 1px solid rgba(255,255,255,.12); pointer-events: none; }
 .sani__sensor { position: absolute; left: 18.5%; top: 80%; width: 10px; height: 10px; margin: -5px 0 0 -5px; border-radius: 50%; background: #ff3b3b; box-shadow: 0 0 10px #ff3b3b; }
 .sani__sensor::after { content: ""; position: absolute; inset: -14px; border-radius: 50%; border: 1px solid rgba(255,59,59,.6); animation: saniPing 1.6s ease-out infinite; }
 .sani.is-on .sani__sensor { background: var(--green); box-shadow: 0 0 14px var(--green); }
@@ -572,16 +573,3 @@ body::after {
 .reveal__stats div > span { font-family: var(--mono); font-size: 9px; letter-spacing: .12em; text-transform: uppercase; color: var(--ink-mute); }
 @media (max-width: 760px) { .reveal__caption { flex-direction: column; gap: 8px; padding: 12px; text-align: center; } }
 
-/* sanitizer gadget: real figurine on a built sensor box */
-.sani__gadget { left: 56%; bottom: 13%; width: 30%; transform: translateX(-50%); filter: none; }
-.sani__gadget::after { content: ""; position: absolute; left: -6%; right: -10%; bottom: -5%; height: 12%; background: radial-gradient(closest-side, rgba(0,0,0,.75), transparent); z-index: -1; }
-.sani__fig { position: relative; z-index: 2; display: block; width: 52%; margin: 0 0 -3% 16%; pointer-events: none; filter: drop-shadow(-6px 10px 14px rgba(0,0,0,.45)) saturate(1.05); }
-.sani__base { position: relative; width: 100%; aspect-ratio: 2.3 / 1; }
-.sani__top { position: absolute; left: 0; right: 0; top: -16%; height: 22%; background: linear-gradient(90deg, #f6f3ee, #e4dfd9); clip-path: polygon(7% 0, 100% 0, 93% 100%, 0 100%); }
-.sani__side { position: absolute; right: 0; top: -16%; bottom: 0; width: 7%; background: linear-gradient(#b8b2ab, #8f8a85); clip-path: polygon(0 22%, 100% 0, 100% 84%, 0 100%); }
-.sani__front { position: absolute; left: 0; right: 7%; top: 6%; bottom: 0; border-radius: 0 0 3px 3px; background: linear-gradient(180deg, #ece8e2, #cfc9c2); box-shadow: inset 0 -10px 18px rgba(0,0,0,.12); }
-.sani__module { position: absolute; left: 6%; top: 12%; width: 28%; height: 76%; border-radius: 6px; background: linear-gradient(160deg, #26262b, #0b0b0e); box-shadow: 0 3px 8px rgba(0,0,0,.35), inset 0 1px 0 rgba(255,255,255,.08); }
-.sani__module > span:first-child { position: absolute; left: 12%; top: 10%; font-family: var(--display); font-size: clamp(10px, 1.1vw, 16px); color: #8fb4d6; letter-spacing: .04em; }
-.sani__module .sani__sensor { left: 50%; top: 64%; }
-.sani__brand { position: absolute; right: 7%; top: 50%; transform: translateY(-50%); text-align: right; font-size: clamp(7px, .62vw, 10px); color: #8a847d; line-height: 1.5; }
-.sani__label { left: 0; top: 104%; }
