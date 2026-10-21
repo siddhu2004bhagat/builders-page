@@ -5,6 +5,7 @@
    ========================================================== */
 (function () {
   gsap.registerPlugin(ScrollTrigger, MotionPathPlugin, Draggable, InertiaPlugin);
+  ScrollTrigger.config({ ignoreMobileResize: true });
   const $ = (s, c = document) => c.querySelector(s);
   const $$ = (s, c = document) => [...c.querySelectorAll(s)];
   const reduce = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
@@ -32,7 +33,7 @@
   /* ---------- smooth scroll ---------- */
   let lenis = null;
   if (!reduce) {
-    lenis = new Lenis({ lerp: 0.085 });
+    lenis = new Lenis({ lerp: 0.1 });
     lenis.on("scroll", ScrollTrigger.update);
     gsap.ticker.add((t) => lenis.raf(t * 1000));
     gsap.ticker.lagSmoothing(0);
@@ -140,11 +141,12 @@
   /* ==========================================================
      3D WORKSHOP — pinned camera flight between stations
      ========================================================== */
+  let worldOn = true;
   (function world() {
     const cards = $$(".tour__card"), dots = $$(".tour__dots i"), vfStation = $("#vfStation");
     const tl = gsap.timeline({
       defaults: { ease: "power2.inOut" },
-      scrollTrigger: { trigger: ".world", start: "top top", end: () => "+=" + innerHeight * 9, pin: true, scrub: 1.2, anticipatePin: 1 },
+      scrollTrigger: { trigger: ".world", start: "top top", end: () => "+=" + innerHeight * 9, pin: true, scrub: 0.6, anticipatePin: 1, onToggle: (st) => (worldOn = st.isActive) },
     });
     tl.to(".world__hero, .hero__scroll", { autoAlpha: 0, y: -40, duration: 0.6 }, 0.2)
       .to(".world .letterbox", { scaleY: 1, duration: 0.6 }, 0.3);
@@ -164,17 +166,21 @@
       .to(window.CAM, { ...K(0, 5.4, 18 + (isMobile ? 6 : 0), 0, 1.2, -2, 38 + fovAdj), duration: 1.4 }, "<");
     marks.push([tl.duration() - 0.7, -1]);
     tl.to(".world .letterbox", { scaleY: 0, duration: 0.5 }, "-=0.6").to({}, { duration: 0.4 });
+    let lastCur = -2;
     tl.eventCallback("onUpdate", () => {
       const t = tl.time();
       let cur = -1;
       for (const [time, i] of marks) if (t >= time) cur = i;
+      if (cur === lastCur) return;
+      lastCur = cur;
       vfStation.textContent = cur < 0 ? "WIDE · THE WORKSHOP" : stops[cur].name;
       const d = cur < 0 ? 0 : stops[cur].card + 1;
       dots.forEach((el, i) => el.classList.toggle("on", i === d));
     });
     // running timecode in the viewfinder
     const tc = $("#vfTc"), t0 = performance.now();
-    gsap.ticker.add(() => { const f = Math.floor((performance.now() - t0) / (1000 / 24)); tc.textContent = [Math.floor(f / 86400) % 24, Math.floor(f / 1440) % 60, Math.floor(f / 24) % 60, f % 24].map((n) => String(n).padStart(2, "0")).join(":"); });
+    let lastF = -1;
+    gsap.ticker.add(() => { if (!worldOn) return; const f = Math.floor((performance.now() - t0) / (1000 / 24)); if (f === lastF) return; lastF = f; tc.textContent = [Math.floor(f / 86400) % 24, Math.floor(f / 1440) % 60, Math.floor(f / 24) % 60, f % 24].map((n) => String(n).padStart(2, "0")).join(":"); });
   })();
 
   /* ---------- section reveals ---------- */
@@ -189,8 +195,8 @@
     const tl = gsap.timeline({ paused: true, defaults: { ease: "none" } });
     mm.add({ desk: "(min-width: 961px)", mob: "(max-width: 960px)" }, (ctx) => {
       const st = ctx.conditions.desk
-        ? { trigger: section, start: "top top", end: () => "+=" + innerHeight * length, pin: true, scrub: 0.8, anticipatePin: 1 }
-        : { trigger: $(stageSel, section) || section, start: "top 75%", end: "bottom 25%", scrub: 0.8 };
+        ? { trigger: section, start: "top top", end: () => "+=" + innerHeight * length, pin: true, scrub: 0.5, anticipatePin: 1 }
+        : { trigger: $(stageSel, section) || section, start: "top 75%", end: "bottom 25%", scrub: 0.5 };
       const s = ScrollTrigger.create({ ...st, animation: tl });
       return () => s.kill();
     });
@@ -391,7 +397,7 @@
       gsap.to(qa(".rv-rec"), { opacity: 0.2, duration: 0.5, yoyo: true, repeat: -1 });
       gsap.to(q(".rv-glow"), { opacity: 0.6, duration: 1.2, yoyo: true, repeat: -1, ease: "sine.inOut" });
     }
-    const tl = gsap.timeline({ defaults: { ease: "none" }, scrollTrigger: { trigger: sec, start: "top top", end: () => "+=" + innerHeight * 4.2, pin: true, scrub: 0.9, anticipatePin: 1 } });
+    const tl = gsap.timeline({ defaults: { ease: "none" }, scrollTrigger: { trigger: sec, start: "top top", end: () => "+=" + innerHeight * 4.2, pin: true, scrub: 0.5, anticipatePin: 1 } });
     const swap = (id, from, to, at) => tl.to(q(`.rv-person--${id} .rv-pose--${from}`), { opacity: 0, duration: 0.01 }, at).to(q(`.rv-person--${id} .rv-pose--${to}`), { opacity: 1, duration: 0.01 }, at);
     const pop = (sel, at) => tl.to(q(sel), { scale: 1, duration: 0.04, ease: "back.out(3)" }, at);
     const run = (id, fromX, toX, at, dur) => tl.fromTo(P(id), { x: fromX }, { x: toX, duration: dur, ease: "power1.out" }, at).to(P(id), { y: "-=16", duration: dur / 8, yoyo: true, repeat: 7, ease: "sine.inOut" }, at);
@@ -694,6 +700,26 @@
   })();
   gsap.fromTo(".footer__scribble path", { strokeDasharray: 600, strokeDashoffset: 600 }, { strokeDashoffset: 0, duration: 1.2, ease: "power2.out", scrollTrigger: { trigger: ".footer__cta", start: "top 75%" } });
   gsap.from(".footer__big", { yPercent: 40, ease: "none", scrollTrigger: { trigger: ".footer", start: "top bottom", end: "bottom bottom", scrub: true } });
+
+  /* ---------- performance: endless loops only run while their section is on screen ---------- */
+  (function pauseOffscreen() {
+    const groups = new Map();
+    gsap.globalTimeline.getChildren(true, true, true).forEach((t) => {
+      if (t.repeat() !== -1 || t.scrollTrigger) return;
+      const el = t.targets && t.targets()[0];
+      if (!el || !el.nodeType) return;
+      const sec = el.closest("section, footer, .marquee");
+      if (!sec) return;
+      if (!groups.has(sec)) groups.set(sec, []);
+      groups.get(sec).push(t);
+    });
+    groups.forEach((tweens, sec) => {
+      const set = (on) => tweens.forEach((t) => t.paused(!on));
+      // pinned sections live inside a pin-spacer whose height includes the pinned scroll distance
+      const trigger = sec.parentElement && sec.parentElement.classList.contains("pin-spacer") ? sec.parentElement : sec;
+      ScrollTrigger.create({ trigger, start: "top bottom", end: "bottom top", onToggle: (st) => set(st.isActive), onRefresh: (st) => set(st.isActive) });
+    });
+  })();
 
   document.fonts && document.fonts.ready.then(() => ScrollTrigger.refresh());
 })();

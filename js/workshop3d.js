@@ -16,12 +16,14 @@ const canvas = document.getElementById("gl");
 const reduce = matchMedia("(prefers-reduced-motion: reduce)").matches;
 const mobile = matchMedia("(max-width: 760px)").matches;
 
-const renderer = new THREE.WebGLRenderer({ canvas, antialias: true, powerPreference: "high-performance" });
-renderer.setPixelRatio(Math.min(devicePixelRatio, mobile ? 1.25 : 1.6));
+// antialias comes from the composer's multisampled target, so the default buffer doesn't need it
+const renderer = new THREE.WebGLRenderer({ canvas, antialias: false, powerPreference: "high-performance" });
+let pixelRatio = Math.min(devicePixelRatio, mobile ? 1 : 1.25);
+renderer.setPixelRatio(pixelRatio);
 renderer.toneMapping = THREE.ACESFilmicToneMapping;
 renderer.toneMappingExposure = 0.95;
 renderer.shadowMap.enabled = true;
-renderer.shadowMap.type = THREE.PCFSoftShadowMap;
+renderer.shadowMap.type = THREE.PCFShadowMap;
 
 const scene = new THREE.Scene();
 scene.background = new THREE.Color("#07060a");
@@ -182,7 +184,7 @@ const graphTex = canvasTex(1024, 576, (g, w, h, t = 0) => {
 const tv = screen(1.7, 0.96, graphTex, 1.3); tv.position.set(-6.55, 2.05, -3.36); scene.add(tv);
 box(1.78, 1.04, 0.05, M.black, -6.55, 2.05, -3.4);
 const rajaSpot = new THREE.SpotLight("#e8eeff", 11, 9, 0.55, 0.7, 1.4); rajaSpot.position.set(-8.4, 4.2, 0.5); rajaSpot.target.position.set(-9.2, 1.6, -3.3);
-rajaSpot.castShadow = true; rajaSpot.shadow.mapSize.set(1024, 1024); rajaSpot.shadow.bias = -0.0005; scene.add(rajaSpot, rajaSpot.target);
+rajaSpot.castShadow = false; scene.add(rajaSpot, rajaSpot.target);
 // standing table
 box(1.3, 0.05, 0.7, M.woodDark, -7.3, 1.05, -1.7); cyl(0.04, 0.04, 1.05, M.darkMetal, -7.3, 0.52, -1.7, scene, 10);
 box(0.36, 0.02, 0.25, M.darkMetal, -7.45, 1.09, -1.7);
@@ -264,7 +266,7 @@ cyl(0.006, 0.006, 1.3, M.black, 0, 3.75, -2.6, scene, 6);
 const pend = cyl(0.06, 0.32, 0.22, M.darkMetal, 0, 3.0, -2.6, scene, 28);
 const bulb = new THREE.Mesh(new THREE.SphereGeometry(0.06, 16, 12), new THREE.MeshBasicMaterial({ color: new THREE.Color(1.8, 1.4, 1.0) })); bulb.position.set(0, 2.88, -2.6); scene.add(bulb);
 const benchSpot = new THREE.SpotLight("#ffd2a0", 11, 6, 0.75, 0.6, 1.4); benchSpot.position.set(0, 2.86, -2.6); benchSpot.target.position.set(0, 0.9, -2.6);
-benchSpot.castShadow = true; benchSpot.shadow.mapSize.set(mobile ? 1024 : 2048, mobile ? 1024 : 2048); benchSpot.shadow.bias = -0.0004; benchSpot.shadow.radius = 4; scene.add(benchSpot, benchSpot.target);
+benchSpot.castShadow = true; benchSpot.shadow.mapSize.set(mobile ? 512 : 1024, mobile ? 512 : 1024); benchSpot.shadow.bias = -0.0004; benchSpot.shadow.radius = 4; scene.add(benchSpot, benchSpot.target);
 const sparkLight = new THREE.PointLight("#ffb347", 0, 2.2, 2); sparkLight.position.set(0.3, 1.05, -2.5); scene.add(sparkLight);
 seatedPerson("sudhanshu", -0.75, -1.95, 0.12);
 seatedPerson("aryan", 0.85, -1.95, -0.12);
@@ -302,7 +304,7 @@ const doorOut = new THREE.Mesh(new THREE.PlaneGeometry(1.8, 2.6), new THREE.Mesh
 doorOut.position.set(10.3, 1.3, -3.39); scene.add(doorOut);
 box(0.12, 2.75, 0.2, M.darkMetal, 9.35, 1.37, -3.35); box(0.12, 2.75, 0.2, M.darkMetal, 11.25, 1.37, -3.35); box(2.02, 0.15, 0.2, M.darkMetal, 10.3, 2.7, -3.35);
 const doorLight = new THREE.SpotLight("#ffcf9a", 16, 10, 0.7, 0.8, 1.3); doorLight.position.set(10.3, 2.2, -3.6); doorLight.target.position.set(9.6, 0, 0.5);
-doorLight.castShadow = !mobile; doorLight.shadow.mapSize.set(1024, 1024); scene.add(doorLight, doorLight.target);
+doorLight.castShadow = false; scene.add(doorLight, doorLight.target);
 const labelTex = (t) => canvasTex(256, 160, (g, w, h) => { g.fillStyle = "#a07a4a"; g.fillRect(0, 0, w, h); g.fillStyle = "#3a2a14"; g.font = "bold 34px 'JetBrains Mono', monospace"; g.fillText(t, 18, 90); g.strokeStyle = "#3a2a14"; g.lineWidth = 3; g.strokeRect(10, 40, w - 20, 70); });
 [[8.6, 0.25, -2.6, 0.6, 0.5, "SERVO x40"], [8.65, 0.72, -2.65, 0.5, 0.44, "LI-ION"], [9.2, 0.2, -2.9, 0.42, 0.4, "LED 20m"], [8.0, 0.22, -2.9, 0.45, 0.44, "MOTORS"]].forEach(([x, y, z, s, hgt, t]) => {
   const mats = Array(6).fill(M.cardboard).map((m, i) => (i === 4 ? std("#fff", { map: labelTex(t), roughness: 0.85 }) : m));
@@ -316,7 +318,7 @@ const stem = cyl(0.03, 0.03, 0.8, M.metal, 0, 0.75, -0.5, sc, 8); stem.rotation.
 standingPerson("sahil", 9.7, -1.4, -0.5, "phone");
 
 /* ---------------- ambient particles: dust + sparks ---------------- */
-const dustN = mobile ? 250 : 600, dustGeo = new THREE.BufferGeometry(), dustPos = new Float32Array(dustN * 3);
+const dustN = mobile ? 150 : 300, dustGeo = new THREE.BufferGeometry(), dustPos = new Float32Array(dustN * 3);
 for (let i = 0; i < dustN; i++) { dustPos[i * 3] = (Math.random() - 0.5) * 24; dustPos[i * 3 + 1] = Math.random() * 3.8; dustPos[i * 3 + 2] = -3.3 + Math.random() * 6; }
 dustGeo.setAttribute("position", new THREE.BufferAttribute(dustPos, 3));
 const dust = new THREE.Points(dustGeo, new THREE.PointsMaterial({ color: "#ffd9b0", size: 0.012, transparent: true, opacity: 0.55, depthWrite: false, blending: THREE.AdditiveBlending }));
@@ -336,7 +338,7 @@ function emitSpark() {
 }
 
 /* ---------------- post processing ---------------- */
-const composer = new EffectComposer(renderer);
+const composer = new EffectComposer(renderer, new THREE.WebGLRenderTarget(1, 1, { type: THREE.HalfFloatType, samples: mobile ? 0 : 4 }));
 composer.addPass(new RenderPass(scene, camera));
 const bloom = new UnrealBloomPass(new THREE.Vector2(1, 1), 0.45, 0.45, 0.92);
 composer.addPass(bloom);
@@ -352,6 +354,7 @@ const mouse = { x: 0, y: 0, sx: 0, sy: 0 };
 addEventListener("pointermove", (e) => { mouse.x = e.clientX / innerWidth - 0.5; mouse.y = e.clientY / innerHeight - 0.5; });
 function resize() {
   const w = canvas.clientWidth, h = canvas.clientHeight;
+  renderer.setPixelRatio(pixelRatio); composer.setPixelRatio(pixelRatio);
   renderer.setSize(w, h, false); composer.setSize(w, h); bloom.setSize(w, h);
   camera.aspect = w / h; camera.updateProjectionMatrix();
 }
@@ -360,10 +363,18 @@ addEventListener("resize", resize); resize();
 let visible = true;
 new IntersectionObserver(([e]) => (visible = e.isIntersecting)).observe(canvas);
 const clock = new THREE.Clock();
+let frameNo = 0, ema = 1 / 60, slowFrames = 0, quality = 2, useBloom = true;
+function degrade() {
+  quality--;
+  if (quality === 1) { pixelRatio = Math.min(pixelRatio, 1); useBloom = false; resize(); }
+  if (quality === 0) { renderer.shadowMap.enabled = false; scene.traverse((o) => o.material && (o.material.needsUpdate = true)); }
+}
 function frame() {
   requestAnimationFrame(frame);
-  if (!visible) return;
-  const dt = Math.min(clock.getDelta(), 0.05), t = clock.elapsedTime;
+  if (!visible) { clock.getDelta(); return; }
+  const raw = clock.getDelta(), dt = Math.min(raw, 0.05), t = clock.elapsedTime;
+  ema += (raw - ema) * 0.05;
+  if (quality > 0 && ema > 1 / 45) { if (++slowFrames > 90) { slowFrames = 0; degrade(); } } else slowFrames = 0;
   mouse.sx += (mouse.x - mouse.sx) * 0.04; mouse.sy += (mouse.y - mouse.sy) * 0.04;
   camera.position.set(CAM.px + mouse.sx * 0.35, CAM.py - mouse.sy * 0.2, CAM.pz);
   camera.lookAt(CAM.tx + mouse.sx * 0.15, CAM.ty - mouse.sy * 0.08, CAM.tz);
@@ -397,13 +408,14 @@ function frame() {
     for (let i = 0; i < dustN; i++) { dustPos[i * 3 + 1] += Math.sin(t * 0.3 + i) * 0.0006; dustPos[i * 3] += 0.0008; if (dustPos[i * 3] > 12) dustPos[i * 3] = -12; }
     dustGeo.attributes.position.needsUpdate = true;
     // neon flicker + screens
-    neon.material.color.setScalar(Math.random() < 0.012 ? 0.4 : 1).multiply(new THREE.Color(2.2, 1.6, 1.3));
-    neonLight.intensity = neon.material.color.r > 1 ? 6 : 1.5;
-    scopeDraw(t);
+    const flick = Math.random() < 0.012 ? 0.4 : 1;
+    neon.material.color.setRGB(2.2 * flick, 1.6 * flick, 1.3 * flick);
+    neonLight.intensity = flick === 1 ? 6 : 1.5;
+    if (++frameNo % 3 === 0) scopeDraw(t);
     printLed.material.color.setRGB(0.6, 1.8 + Math.sin(t * 2) * 0.6, 2.2);
   }
 
-  composer.render();
+  if (useBloom) composer.render(); else renderer.render(scene, camera);
 
   // tracked name labels
   for (const L of labels) {
